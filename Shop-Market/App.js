@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView } from 'react-native';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="auto" backgroundColor='#1E92C4'/>
+    <View>
+      <Text>My Shop Market List</Text>
     </View>
+    </SafeAreaView>
   );
 }
 
