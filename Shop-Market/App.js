@@ -9,10 +9,10 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" backgroundColor='#1E92C4'/>
-    <View>
-      <Text>My Shop Market List</Text>
-      <Text>Last edit by: {editor}</Text>
-    </View>
+        <View>
+          <Text>My Shop Market List</Text>
+          <Text>Last edit by: {editor}</Text>
+        </View>
     </SafeAreaView>
   );
 }
