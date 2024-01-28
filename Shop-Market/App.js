@@ -1,17 +1,35 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image } from 'react-native';
+import { Card, Button } from 'react-native-paper';
 
 export default function App() {
-  const [editor, setEditor] = useState('');
+  const [editor, setEditor] = useState('ofir');
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
+  const date = new Date().toLocaleString();
+  
+
+  const getData = async() =>{
+    console.log("Get data");
+  };
 
   const saveItem = () => {
     if (item.trim() !== '') {
+      if(!items.includes(item)){
       setItems([...items, item]);
       setItem(''); // Clear the input after saving
     }
+    else{
+      alert("Item already exists!");
+      setItem('');
+    }}
+  };
+
+  const deleteItem = (index) => {
+    const newItems = [...items];
+    newItems.splice(index, 1);
+    setItems(newItems);
   };
 
   const clearList = () => {
@@ -19,39 +37,66 @@ export default function App() {
     alert('List cleared');
   };
 
+  
+
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" backgroundColor="#1E92C4" />
 
+        <ScrollView>
       <View style={styles.header}>
         <Text style={{ fontSize: 20, fontWeight: 'bold' }}>רשימת הקניות שלי🛒</Text>
-        <Text style={{ fontSize: 20 }}>Last edit by: {editor}</Text>
-      </View>
-
-    <ScrollView>
+        <Text style={{ fontSize: 20 }}>Last edit by: {editor} AT: {date}</Text>
       <TextInput
         style={{ height: 40 }}
-        placeholder="Type here to start"
+        placeholder="הקש כאן כדי להוסיף דברים לרשימה"
         onChangeText={(newText) => setItem(newText)}
         value={item} // Use value instead of defaultValue
+        autoFocus={true}
       />
+      </View>
 
-      <View>
-        {items?.map((item, index) => (
-          <Text key={index} style={styles.item}>
-            {item}
-          </Text>
+
+    {items.length === 0 && (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>הרשימה ריקה כרגע</Text>
+        <Image source={require('./assets/marketCart.png')} style={{ width: 200, height: 200 }} />
+      </View>
+    )}
+        
+
+
+
+      {/* Display the list as card with option to delete */}
+        {items.slice().reverse().map((item, index) => (
+          <Card key={index} style={{ backgroundColor: "white" }}>
+            <Card.Actions style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Text style={[styles.item, { flex: 1 }]}>
+                  {item}
+                </Text>
+              <Button style={{ backgroundColor: "#f44336" }} onPress={() => deleteItem(items.length - index - 1)}>
+                <Text style={{ color: "white" }}>X</Text>
+              </Button>
+            </Card.Actions>
+          </Card>
         ))}
-      </View>
+
+
       </ScrollView>
-      <View style={{flexDirection:"row",}}>
-      <TouchableOpacity onPress={() => saveItem(item)}>
-        <Text style={styles.saveBotton}>Save</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => clearList()}>
-        <Text style={styles.clearBotton}>Clear List</Text>
-      </TouchableOpacity>
+
+      <View style={{flexDirection:"row",justifyContent: 'space-between'}}>
+        <TouchableOpacity onPress={() => saveItem(item)}>
+          <Text style={styles.saveBotton}>Save</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => getData()}>
+          <Image source={require('./assets/refreshButton.png')}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => clearList()}>
+          <Text style={styles.clearBotton}>Clear List</Text>
+        </TouchableOpacity>
       </View>
+
     </SafeAreaView>
   );
 }
@@ -60,12 +105,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    flexDirection: 'column',
     justifyContent: 'flex-start',
     paddingTop: 35,
   },
   header: {
-    alignItems: 'center',
+    flex: 1,
+    alignItems: 'center',  // Updated this line
     backgroundColor: '#fff',
     padding: 10,
   },
@@ -89,5 +134,7 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
     borderRadius: 5,
+    alignContent: "flex-end",
+    right: 0,
   },
 });
