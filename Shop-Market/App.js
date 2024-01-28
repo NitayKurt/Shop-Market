@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image } from 'react-native';
 import { Card, Button } from 'react-native-paper';
+import EmptyListCase from './components/EmptyListCase';
+
 
 export default function App() {
   const [editor, setEditor] = useState('ofir');
@@ -57,16 +59,11 @@ export default function App() {
       />
       </View>
 
-
-    {items.length === 0 && (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', textAlign: 'center' }}>הרשימה ריקה כרגע</Text>
-        <Image source={require('./assets/marketCart.png')} style={{ width: 200, height: 200 }} />
-      </View>
-    )}
+      {/* If the list is empty display this just for nice UI*/}
+      {items.length === 0 && (
+          <EmptyListCase />
+      )}
         
-
-
 
       {/* Display the list as card with option to delete */}
         {items.slice().reverse().map((item, index) => (
@@ -90,7 +87,7 @@ export default function App() {
           <Text style={styles.saveBotton}>Save</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => getData()}>
-          <Image source={require('./assets/refreshButton.png')}/>
+          <Image source={require('./assets/refreshButton.png')} style={{height:50,width:50}}/>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => clearList()}>
           <Text style={styles.clearBotton}>Clear List</Text>
