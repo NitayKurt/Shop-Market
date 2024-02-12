@@ -3,25 +3,30 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import EmptyListCase from './components/EmptyListCase';
-
-
+import { collection, query, where, getDocs, deleteDoc, doc, addDoc } from 'firebase/firestore';
+import { auth, database } from './firebase-config';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 export default function App() {
   const [editor, setEditor] = useState('ofri');
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
   const date = new Date().toLocaleString();
-  
+  const firebaseAuth = getAuth();
+  const itemsRef = collection(database, "market-list");
 
   const getData = async() =>{
     console.log("Get data");
   };
 
-  const saveItem = () => {
+  const saveItem = async() => {
     if (item.trim() !== '') {
       if(!items.includes(item)){
       setItems([...items, item]);
       setItem(''); // Clear the input after saving
+      collection(database, "market-list").add({ item: item, editor: editor, date: date });
+      await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items});
+      
     }
     else{
       alert("Item already exists!");
