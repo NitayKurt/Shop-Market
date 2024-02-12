@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import EmptyListCase from './components/EmptyListCase';
-import {API_KEY, AUTH_DOMAIN , PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID,MEASUREMENT_ID} from '@env';
+
 
 
 export default function App() {
