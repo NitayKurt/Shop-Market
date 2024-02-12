@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import EmptyListCase from './components/EmptyListCase';
 
 
 export default function App() {
-  const [editor, setEditor] = useState('ofir');
+  const [editor, setEditor] = useState('ofri');
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
   const date = new Date().toLocaleString();
@@ -28,6 +28,10 @@ export default function App() {
     }}
   };
 
+  const sendList = () => {
+    console.log(items);
+  };
+
   const deleteItem = (index) => {
     const newItems = [...items];
     newItems.splice(index, 1);
@@ -35,8 +39,14 @@ export default function App() {
   };
 
   const clearList = () => {
-    setItems([]);
-    alert('List cleared');
+    Alert.alert('Alert', 'Are you sure you want to delete the whole list?', [
+      {
+        text: 'Cancel',
+        onPress: () => {console.log('Cancel Pressed')},
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => {setItems([]), alert('List cleared')}},
+    ]);
   };
 
   
@@ -56,6 +66,7 @@ export default function App() {
         onChangeText={(newText) => setItem(newText)}
         value={item} // Use value instead of defaultValue
         autoFocus={true}
+        onSubmitEditing={() => saveItem()}
       />
       </View>
 
@@ -83,11 +94,11 @@ export default function App() {
       </ScrollView>
 
       <View style={{flexDirection:"row",justifyContent: 'space-between'}}>
-        <TouchableOpacity onPress={() => saveItem(item)}>
+        <TouchableOpacity onPress={() => sendList(items)}>
           <Text style={styles.saveBotton}>Save</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => getData()}>
-          <Image source={require('./assets/refreshButton.png')} style={{height:50,width:50}}/>
+        <Text style={styles.refershBotton}>Refresh</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => clearList()}>
           <Text style={styles.clearBotton}>Clear List</Text>
@@ -118,6 +129,14 @@ const styles = StyleSheet.create({
   },
   saveBotton: {
     backgroundColor: '#4caf50',
+    color: 'white',
+    fontSize: 20,
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+  },
+  refershBotton: {
+    backgroundColor: '#00B0FF',
     color: 'white',
     fontSize: 20,
     padding: 10,
