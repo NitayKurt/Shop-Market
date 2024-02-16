@@ -1,15 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
-import { collection, query, where, getDocs, deleteDoc, doc, addDoc } from '../firebase-config';
-import { auth, database } from '../firebase-config';
+import EmptyListCase from './components/EmptyListCase';
+import { collection, query, where, getDocs, deleteDoc, doc, addDoc } from 'firebase/firestore';
+import { auth, database } from './firebase-config';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 
 export default function ShopList() {
-
-  const { user } = useContext(AppContext);
-  const [editor, setEditor] = useState(user);
+  const [editor, setEditor] = useState('ofri');
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
   const date = new Date().toLocaleString();
@@ -20,11 +19,24 @@ export default function ShopList() {
     console.log("Get data");
   };
 
-  const saveItem = async() => {
+  const saveItem = async(e) => {
+    if(e.key === 'Enter'){
+      if (item.trim() !== '') {
+        if(!items.includes(item)){
+        setItems([...items, item]);
+        setItem(''); // Clear the input after saving
+        collection(database, "market-list").add({ item: item, editor: editor, date: date });
+        await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items}); 
+      }
+    }
+  }
     if (item.trim() !== '') {
       if(!items.includes(item)){
       setItems([...items, item]);
       setItem(''); // Clear the input after saving
+      collection(database, "market-list").add({ item: item, editor: editor, date: date });
+      await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items});
+      
     }
     else{
       alert("Item already exists!");
@@ -32,11 +44,8 @@ export default function ShopList() {
     }}
   };
 
-  const sendList = async() => {
+  const sendList = () => {
     console.log(items);
-    collection(database, "market-list").add({ item: item, editor: editor, date: date });
-    await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items});
-  
   };
 
   const deleteItem = (index) => {
@@ -73,9 +82,9 @@ export default function ShopList() {
         onChangeText={(newText) => setItem(newText)}
         value={item} // Use value instead of defaultValue
         autoFocus={true}
-        enterKeyHint='enter'
         onSubmitEditing={() => saveItem()}
-      />
+        onKeyPress={(e) => saveItem(e)}
+        />
       </View>
 
       {/* If the list is empty display this just for nice UI*/}
