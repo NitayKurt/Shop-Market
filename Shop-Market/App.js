@@ -19,7 +19,17 @@ export default function App() {
     console.log("Get data");
   };
 
-  const saveItem = async() => {
+  const saveItem = async(e) => {
+    if(e.key === 'Enter'){
+      if (item.trim() !== '') {
+        if(!items.includes(item)){
+        setItems([...items, item]);
+        setItem(''); // Clear the input after saving
+        collection(database, "market-list").add({ item: item, editor: editor, date: date });
+        await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items}); 
+      }
+    }
+  }
     if (item.trim() !== '') {
       if(!items.includes(item)){
       setItems([...items, item]);
@@ -73,7 +83,8 @@ export default function App() {
         value={item} // Use value instead of defaultValue
         autoFocus={true}
         onSubmitEditing={() => saveItem()}
-      />
+        onKeyPress={(e) => saveItem(e)}
+        />
       </View>
 
       {/* If the list is empty display this just for nice UI*/}
