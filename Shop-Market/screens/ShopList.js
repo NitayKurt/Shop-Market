@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView,Image, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
-import EmptyListCase from './components/EmptyListCase';
+import EmptyListCase from '../components/EmptyListCase';
 import { collection, query, where, getDocs, deleteDoc, doc, addDoc } from 'firebase/firestore';
-import { auth, database } from './firebase-config';
+import { auth, database } from '../firebase-config';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
 export default function ShopList() {
+  const navigation = useNavigation();
   const [editor, setEditor] = useState('ofri');
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
@@ -70,21 +72,27 @@ export default function ShopList() {
 
   return (
     <SafeAreaView style={styles.container}>
+
       <StatusBar style="auto" backgroundColor="#1E92C4" />
 
-        <ScrollView>
+      <ScrollView>
+
       <View style={styles.header}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>רשימת הקניות שלי🛒</Text>
+
+        <Text style={{ fontSize: 20, fontWeight: 'bold', margin: 10 }}>רשימת הקניות שלי🛒</Text>
+
         <Text style={{ fontSize: 20 }}>Last edit by: {editor} AT: {date}</Text>
-      <TextInput
-        style={{ height: 40 }}
-        placeholder="הקש כאן כדי להוסיף דברים לרשימה"
-        onChangeText={(newText) => setItem(newText)}
-        value={item} // Use value instead of defaultValue
-        autoFocus={true}
-        onSubmitEditing={() => saveItem()}
-        onKeyPress={(e) => saveItem(e)}
-        />
+
+        <TextInput
+          style={{ height: 40 , color: '#1E92C4', borderColor: '#1E92C4', borderWidth: 1, borderRadius: 5, padding: 10, margin: 20,}}
+          placeholder="הקש כאן כדי להוסיף דברים לרשימה"
+          onChangeText={(newText) => setItem(newText)}
+          value={item} // Use value instead of defaultValue
+          autoFocus={true}
+          onSubmitEditing={(e) => saveItem(e)}
+          onKeyPress={(e) => saveItem(e)}
+          />
+
       </View>
 
       {/* If the list is empty display this just for nice UI*/}
@@ -95,9 +103,9 @@ export default function ShopList() {
 
       {/* Display the list as card with option to delete */}
         {items.slice().reverse().map((item, index) => (
-          <Card key={index} style={{ backgroundColor: "white" }}>
+          <Card key={index} style={{ backgroundColor: "white" , borderColor:"#1E92C4", borderWidth:1}}>
             <Card.Actions style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={[styles.item, { flex: 1 }]}>
+                <Text style={[styles.item, { flex: 1 },]}>
                   {item}
                 </Text>
               <Button style={{ backgroundColor: "#f44336" }} onPress={() => deleteItem(items.length - index - 1)}>
@@ -111,20 +119,25 @@ export default function ShopList() {
       </ScrollView>
 
       <View style={{flexDirection:"row",justifyContent: 'space-between'}}>
+
         <TouchableOpacity onPress={() => sendList(items)}>
           <Text style={styles.saveBotton}>Save</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => getData()}>
         <Text style={styles.refershBotton}>Refresh</Text>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => clearList()}>
           <Text style={styles.clearBotton}>Clear List</Text>
         </TouchableOpacity>
+
       </View>
 
     </SafeAreaView>
+
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -143,6 +156,7 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 18,
     height: 44,
+    color: '#1E92C4',
   },
   saveBotton: {
     backgroundColor: '#4caf50',
