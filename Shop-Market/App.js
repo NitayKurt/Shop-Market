@@ -11,23 +11,26 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
 
 
   return (
     <NavigationContainer>
-      <StatusBar backgroundColor='#82BDC1'/>
-      { user ? 
-      <Stack.Navigator>
-        <Stack.Screen name="ShopList" component={ShopList} />
+      <StatusBar backgroundColor="#82BDC1" />
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false, // Hide header
+          cardStyle: { backgroundColor: '#82BDC1' }, // Set background color for screens
+        }}>
+        {user ? (
+          <Stack.Screen name="ShopList" component={ShopList} />
+        ) : (
+          <Stack.Screen name=" " component={Login} />
+        )}
       </Stack.Navigator>
-      :
-      <Stack.Navigator >
-        <Stack.Screen name=" "  component={Login} />
-      </Stack.Navigator>
-      }
     </NavigationContainer>
-)};
+  )
+};
 
 const styles = StyleSheet.create({
 
