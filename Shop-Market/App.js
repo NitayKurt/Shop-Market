@@ -1,6 +1,5 @@
-import React from 'react'
-import { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from './screens/Login';
@@ -11,8 +10,7 @@ const Stack = createStackNavigator();
 
 export default function App() {
 
-  const [user, setUser] = useState("");
-
+  const [user, setUser] = useState('');
 
   return (
     <NavigationContainer>
@@ -23,10 +21,16 @@ export default function App() {
           cardStyle: { backgroundColor: '#82BDC1' }, // Set background color for screens
         }}>
         {user ? (
-          <Stack.Screen name="ShopList" component={ShopList} />
+          <Stack.Group screenOptions={{ headerShown: false }}>
+            <Stack.Screen name={'ShopList'} component={ShopList} />
+          </Stack.Group>
         ) : (
-          <Stack.Screen name=" " component={Login} />
-        )}
+            <Stack.Group screenOptions={{ headerShown: false }}>
+              <Stack.Screen name={'Login'}>
+                {(props) => <Login {...props} setUser={setUser} />}
+              </Stack.Screen>
+            </Stack.Group>
+          )}
       </Stack.Navigator>
     </NavigationContainer>
   )

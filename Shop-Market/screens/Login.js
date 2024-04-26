@@ -1,56 +1,59 @@
 import React, { useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
-import { TextInput, Button, Appbar } from 'react-native-paper'; // Assuming you have Appbar from react-native-paper
+import { TextInput, Button, } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import ShopList from './ShopList';
 
-export default function Login() {
+export default function Login({ setUser }) {
+
+  const [userInput, setUserInput] = useState('');
   const navigation = useNavigation();
-  const [user, setUser] = useState(null);
 
   const checkUser = () => {
-    if (user.trim() === 'ofri' || user.trim() === 'Ofri'){
+    console.log("user", userInput);
+    if (userInput.trim() === 'ofri' || userInput.trim() === 'Ofri') {
       alert('Welcome back Ofri');
-      navigation.navigate(ShopList);
-    } else if (user.trim() === 'nitay' || user.trim() === 'Nitay'){
+      setUser(userInput);
+      navigation.navigate('ShopList');
+
+    } else if (userInput.trim() === 'nitay' || userInput.trim() === 'Nitay') {
       alert('Welcome Nitay');
-      navigation.navigate(ShopList);
+      setUser(userInput);
+      navigation.navigate('ShopList');
     } else {
       alert('Wrong User Name!');
-      setUser('');
+      setUserInput('');
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
 
-      <View style={{alignContent:"center", alignItems:"center",}}>
+      <View style={{ alignContent: "center", alignItems: "center", }}>
         <Text style={styles.header}>Shop Market 🛒</Text>
       </View>
 
-      
       <View style={styles.circle}>
-          <Image source={require("../assets/groceriesBag.png")} />
+        <Image source={require("../assets/groceriesBag.png")} />
       </View>
-      
 
       <View style={styles.content}>
         <Text style={styles.loginText}>Login</Text>
 
         <TextInput
           autoFocus={true}
-          value={user}
+          value={userInput}
           placeholderTextColor={'#82BDC1'}
           placeholder="הכנס שם משתמש"
           textAlign='center'
           textAlignVertical='center'
-          onChangeText={(text) => setUser(text)}
+          onChangeText={(text) => setUserInput(text)}
           style={styles.textInput}
         />
 
         <Button style={styles.button} mode="contained" onPress={checkUser}>
-          <Text style={{color: 'white',fontSize:20, fontWeight:"bold"}}>התחברות</Text>
+          <Text style={{ color: 'white', fontSize: 20, fontWeight: "bold" }}>התחברות</Text>
         </Button>
+
       </View>
     </SafeAreaView>
   );
@@ -78,7 +81,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     fontSize: 24,
-    marginBottom: 20,
+    marginBottom: 40,
     color: 'white',
   },
   textInput: {
@@ -86,7 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: 'white',
     textAlign: 'center',
-    
+
   },
   button: {
     width: '80%',
@@ -100,6 +103,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: '#f17537',
-    marginTop: 70, // Adjust as needed
+    marginTop: 120,
   },
 });

@@ -8,8 +8,7 @@ import { auth, database } from '../firebase-config';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 
-export default function ShopList() {
-  const navigation = useNavigation();
+export default function ShopList({navigation}) {
   const [editor, setEditor] = useState('ofri');
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
@@ -21,29 +20,36 @@ export default function ShopList() {
     console.log("Get data");
   };
 
-  const saveItem = async(e) => {
-    if(e.key === 'Enter'){
+  const saveItem = (item) => {
       if (item.trim() !== '') {
         if(!items.includes(item)){
         setItems([...items, item]);
         setItem(''); // Clear the input after saving
-        collection(database, "market-list").add({ item: item, editor: editor, date: date });
-        await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items}); 
+        // collection(database, "market-list").add({ item: item, editor: editor, date: date });
+        // await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items}); 
       }
-    }
+    
   }
     if (item.trim() !== '') {
       if(!items.includes(item)){
       setItems([...items, item]);
       setItem(''); // Clear the input after saving
-      collection(database, "market-list").add({ item: item, editor: editor, date: date });
-      await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items});
+      // collection(database, "market-list").add({ item: item, editor: editor, date: date });
+      // await addDoc(itemsRef, { item: item, editor: editor, date: date, items: items});
       
     }
     else{
       alert("Item already exists!");
       setItem('');
     }}
+  };
+
+
+  const handleKeyPress = (key) => {
+    if (key === '.') {
+      saveItem(item);
+      setItem('');
+    }
   };
 
   const sendList = () => {
@@ -73,7 +79,7 @@ export default function ShopList() {
   return (
     <SafeAreaView style={styles.container}>
 
-      <StatusBar style="auto" backgroundColor="#1E92C4" />
+      <StatusBar style="auto" backgroundColor="#82BDC1" />
 
       <ScrollView>
 
@@ -86,11 +92,10 @@ export default function ShopList() {
         <TextInput
           style={{ height: 40 , color: '#1E92C4', borderColor: '#1E92C4', borderWidth: 1, borderRadius: 5, padding: 10, margin: 20,}}
           placeholder="הקש כאן כדי להוסיף דברים לרשימה"
-          onChangeText={(newText) => setItem(newText)}
-          value={item} // Use value instead of defaultValue
+          onChangeText={(text) => setItem(text)}
+          value={item}
           autoFocus={true}
-          onSubmitEditing={(e) => saveItem(e)}
-          onKeyPress={(e) => saveItem(e)}
+          onKeyPress={(e) => handleKeyPress(e.nativeEvent.key)}
           />
 
       </View>
