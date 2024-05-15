@@ -59,7 +59,8 @@ export default function ShopList() {
 
   const addTodo = async () => {
     try {
-      const docRef = await addDoc(collection(db, 'todos'), {
+      console.log('first')
+      const docRef = await addDoc(collection(db, 'products'), {
         title: "todo",
         done: false
       });
