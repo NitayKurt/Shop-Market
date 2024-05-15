@@ -3,8 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import EmptyListCase from '../components/EmptyListCase';
-import { collection, addDoc } from "firebase/firestore"; 
-import { db, } from '../firebase-config';
+import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { db, addData, } from '../firebase-config';
 
 
 export default function ShopList() {
@@ -14,7 +14,7 @@ export default function ShopList() {
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
   const [data, setData] = useState([]);
-  // const docRef = doc(db, 'market', 'products');
+
 
   const getData = async () => {
     try {
@@ -57,36 +57,14 @@ export default function ShopList() {
   };
 
 
-  const addTodo = async () => {
-    try {
-      const docRef = await addDoc(collection(db, "users"), {
-        first: "Ada",
+  const sendList = async () => {
+    
+      const docRef = addDoc(collection(db, "marketList"), {
+        title: "Ada",
         last: "Lovelace",
-        born: 1815
       });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-  };
-
-
-  const sendList = async (items) => {
-    const dataToSave = {
-      title: 'My first todo item',
-      description: 'This is my first todo item',
-      completed: false
-    };
-    try {
-      const docRef = await addDoc(collection(db, "market"), {
-        first: "Ada",
-        last: "Lovelace",
-        born: 1815
-      });
-      console.log("Document written with ID: ", docRef);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+      console.log("Document written with ID: ",docRef);
+   
   };
 
   const deleteItem = (index) => {
@@ -158,7 +136,7 @@ export default function ShopList() {
 
       <View style={{flexDirection:"row",justifyContent: 'space-between'}}>
 
-        <TouchableOpacity onPress={() => addTodo()}>
+        <TouchableOpacity onPress={() => sendList()}>
           <Text style={styles.saveBotton}>Save</Text>
         </TouchableOpacity>
 
