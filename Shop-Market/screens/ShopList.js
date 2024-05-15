@@ -3,9 +3,9 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import EmptyListCase from '../components/EmptyListCase';
-import { collection, getDocs, deleteDoc, doc, addDoc, getDoc,setDoc, getFirestore} from 'firebase/firestore';
+import { collection, addDoc } from "firebase/firestore"; 
 import { db, } from '../firebase-config';
-import { getAuth,} from 'firebase/auth';
+
 
 export default function ShopList() {
 
@@ -13,14 +13,12 @@ export default function ShopList() {
   const date = new Date().toLocaleString();
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
-  const firebaseAuth = getAuth();
-  const itemsRef = collection(db, "market-list").firestore;
   const [data, setData] = useState([]);
-  const docReference = doc(db, "market-list", "products");
+  // const docRef = doc(db, 'market', 'products');
 
   const getData = async () => {
     try {
-      const querySnapshot = await getDocs(collection(db, "market-list"));
+      const querySnapshot = await getDocs(collection(db, "market","products"));
       setData(querySnapshot);
       console.log(data);
     } catch (error) {
@@ -58,21 +56,35 @@ export default function ShopList() {
     }
   };
 
-  const sendList = async () => {
+
+  const addTodo = async () => {
+    try {
+      const docRef = await addDoc(collection(db, 'todos'), {
+        title: "todo",
+        done: false
+      });
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  };
+
+
+  const sendList = async (items) => {
     const dataToSave = {
-      editor: editor,
-      date: date,
-      items: items,
+      title: 'My first todo item',
+      description: 'This is my first todo item',
+      completed: false
     };
     try {
-      await setDoc(docReference, {
-        name: "Frank",
-        favorites: { food: "Pizza", color: "Blue", subject: "recess" },
-    });
-    console.log('Data saved successfully!');
-    } 
-    catch (error) {
-      console.log('Error saving data: ', error);
+      const docRef = await addDoc(collection(db, "market"), {
+        first: "Ada",
+        last: "Lovelace",
+        born: 1815
+      });
+      console.log("Document written with ID: ", docRef);
+    } catch (e) {
+      console.error("Error adding document: ", e);
     }
   };
 
@@ -145,7 +157,7 @@ export default function ShopList() {
 
       <View style={{flexDirection:"row",justifyContent: 'space-between'}}>
 
-        <TouchableOpacity onPress={() => sendList(items)}>
+        <TouchableOpacity onPress={() => addTodo()}>
           <Text style={styles.saveBotton}>Save</Text>
         </TouchableOpacity>
 
