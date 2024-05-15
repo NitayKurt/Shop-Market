@@ -58,7 +58,8 @@ export default function ShopList() {
 
 
   const sendList = async () => {
-    
+   
+
       const docRef = addDoc(collection(db, "marketList"), {
         title: "Ada",
         last: "Lovelace",

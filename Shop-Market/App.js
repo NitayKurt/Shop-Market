@@ -10,12 +10,12 @@ import { useNavigation } from '@react-navigation/native';
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [user, setUser] = useState(null); // Initially user is not authenticated
+  const [user, setUser] = useState("Ofri"); // Initially user is not authenticated
 
   return (
     <NavigationContainer>
       <StatusBar backgroundColor="#82BDC1" />
-      <Stack.Navigator initialRouteName='Login'
+      <Stack.Navigator 
         screenOptions={{
           headerShown: false,
           cardStyle: { backgroundColor: '#82BDC1' },
