@@ -59,14 +59,14 @@ export default function ShopList() {
 
   const addTodo = async () => {
     try {
-      console.log('first')
-      const docRef = await addDoc(collection(db, 'products'), {
-        title: "todo",
-        done: false
+      const docRef = await addDoc(collection(db, "users"), {
+        first: "Ada",
+        last: "Lovelace",
+        born: 1815
       });
-      console.log('Document written with ID: ', docRef.id);
+      console.log("Document written with ID: ", docRef.id);
     } catch (e) {
-      console.error('Error adding document: ', e);
+      console.error("Error adding document: ", e);
     }
   };
 
