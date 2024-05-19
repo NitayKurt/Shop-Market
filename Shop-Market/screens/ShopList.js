@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import EmptyListCase from '../components/EmptyListCase';
 import { collection, getDocs, addDoc } from 'firebase/firestore';
@@ -44,7 +44,7 @@ export default function ShopList() {
       
     }
     else{
-      alert("Item already exists!");
+      alert("Item already exists❗");
       setItem('');
     }}
   };
@@ -65,8 +65,10 @@ export default function ShopList() {
         editor: currentEditor,
         date: date,
       });
+      Alert.alert('Success', 'List sent successfully✅');
       console.log("Document written with ID: ",docRef.id);
     } catch (error) {
+      Alert.alert('Error', 'Error sending list❌');
       console.error('Error adding document: ', error);
     }
     
@@ -79,151 +81,160 @@ export default function ShopList() {
   };
 
   const clearList = () => {
-    Alert.alert('Alert', 'Are you sure you want to delete the whole list?', [
+    Alert.alert('Alert⚠️', 'Are you sure you want to delete the whole list?', [
       {
         text: 'Cancel',
         onPress: () => {console.log('Cancel Pressed')},
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => {setItems([]), alert('List cleared')}},
+      {text: 'OK', onPress: () => {setItems([]), alert('List cleared✅')}},
     ]);
   };
 
   
 
 
-  return (
-    <SafeAreaView style={styles.container}>
+return (
+  <SafeAreaView style={styles.container}>
+    <StatusBar style="auto" backgroundColor="#82BDC1" />
 
-      <StatusBar style="auto" backgroundColor="#82BDC1" />
-
-      
-
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={"height"}
+    >
       <View style={styles.header}>
-
-        <Text style={{ fontSize: 20, fontWeight: 'bold', margin: 10 }}>רשימת הקניות שלי🛒</Text>
-
-        <Text style={{ fontSize: 18 }}>Last edit by: {currentEditor} AT: {date}</Text>
-
+        <Text style={{ fontSize: 20, fontWeight: 'bold', margin: 10, color: "#09263B" }}>רשימת הקניות שלי🛒</Text>
+        <Text style={{ fontSize: 18, color: "#09263B" }}>Last edit by: {currentEditor} AT: {date}</Text>
         <TextInput
-          style={{ height: 40 , color: '#1E92C4', borderColor: '#1E92C4', borderWidth: 2, borderRadius: 5, padding: 10, margin: 20, backgroundColor: 'white'}}
+          style={styles.input}
           placeholder="הקש כאן כדי להוסיף דברים לרשימה"
           onChangeText={(text) => setItem(text)}
           value={item}
           autoFocus={true}
           onKeyPress={(e) => handleKeyPress(e.nativeEvent.key)}
-          />
-
+        />
       </View>
 
-      {/* If the list is empty display this just for nice UI*/}
-      {items.length === 0 && (
-        <View style={{ position:"absolute" ,alignSelf:"center", top:300}}>
+      <View style={styles.itemsList}>
+        {items.length === 0 ? (
           <EmptyListCase />
-        </View>
-      )}
-                
-
-      <View style={ items.length > 0 ? styles.itemsList : styles.itemsListEmpty}>
-        <ScrollView>
-      {/* Display the list as card with option to delete */}
-        {items.slice().reverse().map((item, index) => (
-          <Card key={index} style={{ backgroundColor: "white" , borderColor:"#1E92C4", borderWidth:1}}>
-            <Card.Actions style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                <Text style={[styles.item, { flex: 1 },]}>
-                  {item}
-                </Text>
-              <Button style={{ backgroundColor: "#f44336" }} onPress={() => deleteItem(items.length - index - 1)}>
-                <Text style={{ color: "white" }}>X</Text>
-              </Button>
-            </Card.Actions>
-          </Card>
-        ))}
-        </ScrollView>
+        ) : (
+          <ScrollView>
+            {/* Display the list as card with option to delete */}
+            {items.slice().reverse().map((item, index) => (
+              <Card key={index} style={styles.card}>
+                <Card.Actions style={styles.cardActions}>
+                  <Text style={[styles.item, { flex: 1 }]}>
+                    {item}
+                  </Text>
+                  <Button style={{ backgroundColor: "#f44336" }} onPress={() => deleteItem(items.length - index - 1)}>
+                    <Text style={{ color: "white" }}>X</Text>
+                  </Button>
+                </Card.Actions>
+              </Card>
+            ))}
+          </ScrollView>
+        )}
       </View>
-
-     
 
       <View style={styles.buttonsSection}>
-
         <TouchableOpacity onPress={() => sendList()}>
           <FontAwesome style={styles.saveBotton} name="send" size={24} color="black" />
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => getData()}>
-        <FontAwesome style={styles.refershBotton} name="refresh" size={24} color="black" />
+          <FontAwesome style={styles.refershBotton} name="refresh" size={24} color="black" />
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => clearList()}>
           <AntDesign style={styles.clearBotton} name="delete" size={24} color="black" />
         </TouchableOpacity>
-
       </View>
-
-    </SafeAreaView>
-
-  );
+    </KeyboardAvoidingView>
+  </SafeAreaView>
+);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    paddingTop: 35,
-    borderColor: '#82BDC1',
-    borderWidth:5,
-  },
-  header: {
-    flex: 1,
-    alignItems: 'center',  // Updated this line
-    backgroundColor: '#82BDC1',
-    padding: 10,
-  },
-  item: {
-    padding: 5,
-    fontSize: 18,
-    height: 44,
-    color: '#1E92C4',
-  },
-  saveBotton: {
-    backgroundColor: '#4caf50',
-    color: 'white',
-    fontSize: 20,
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  refershBotton: {
-    backgroundColor: '#00B0FF',
-    color: 'white',
-    fontSize: 20,
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  clearBotton: {
-    backgroundColor: '#f44336',
-    color: 'white',
-    fontSize: 20,
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-    alignContent: "flex-end",
-    right: 0,
-  },
-  itemsList:{
-    borderColor: '#1E92C4',
-    borderWidth: 5,
-    flex: 1,
-    borderRadius: 15,
-   
-  },
-  itemsListEmpty:{
-   
-  },
-  buttonsSection:{
-    flexDirection:"row",
-    justifyContent: 'space-between',
-    backgroundColor: '#82BDC1',
-  },
+container: {
+  flex: 1,
+  justifyContent: 'flex-start',
+  paddingTop: 35,
+  borderColor: '#82BDC1',
+  borderWidth: 5,
+},
+header: {
+  alignItems: 'center',
+  backgroundColor: '#82BDC1',
+  padding: 10,
+},
+input: {
+  height: 40,
+  color: '#1E92C4',
+  borderColor: '#1E92C4',
+  borderWidth: 2,
+  borderRadius: 5,
+  padding: 10,
+  margin: 20,
+  backgroundColor: 'white',
+  width: '80%',
+},
+item: {
+  padding: 5,
+  fontSize: 18,
+  height: 44,
+  color: '#1E92C4',
+},
+saveBotton: {
+  backgroundColor: '#4caf50',
+  color: 'white',
+  fontSize: 20,
+  padding: 10,
+  margin: 10,
+  borderRadius: 5,
+},
+refershBotton: {
+  backgroundColor: '#00B0FF',
+  color: 'white',
+  fontSize: 20,
+  padding: 10,
+  margin: 10,
+  borderRadius: 5,
+},
+clearBotton: {
+  backgroundColor: '#f44336',
+  color: 'white',
+  fontSize: 20,
+  padding: 10,
+  margin: 10,
+  borderRadius: 5,
+  alignContent: "flex-end",
+  right: 0,
+},
+itemsList: {
+  flex: 1,
+  borderColor: '#09263B',
+  borderWidth: 5,
+  borderRadius: 15,
+  backgroundColor: '#82BDC1',
+  marginTop: 10,
+  paddingHorizontal: 20,
+  paddingVertical: 10,
+},
+card: {
+  backgroundColor: "white",
+  borderColor: "#1E92C4",
+  borderWidth: 1,
+  marginVertical: 5,
+},
+cardActions: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+},
+buttonsSection: {
+  flexDirection: "row",
+  justifyContent: 'space-between',
+  backgroundColor: '#82BDC1',
+  padding: 10,
+},
+itemsListEmpty: {},
 });
