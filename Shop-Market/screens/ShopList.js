@@ -87,20 +87,23 @@ export default function ShopList() {
         editor: currentEditor,
         date: date,
       });
+      console.log("Document written with ID: ",docRef.id);
+      Alert.alert('Success', 'List sent successfully✅');
+
       } else {
       const updateProducts = await updateDoc(doc(FIRESTORE_DB, "products",dataId), {
         items: items,
         editor: currentEditor,
         date: date,
       });
+      console.log("Document updated with ID: ", dataId);
+      Alert.alert('Success', 'List Updated successfully✅');
       }
-      Alert.alert('Success', 'List sent successfully✅');
-      console.log("Document written with ID: ",docRef.id);
+
     } catch (error) {
       Alert.alert('Error', 'Error sending list❌');
       console.error('Error adding document: ', error);
     }
-    
   };
 
   const deleteItem = (index) => {
