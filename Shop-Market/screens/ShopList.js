@@ -7,8 +7,9 @@ import { collection, getDocs, addDoc, setDoc, doc,updateDoc } from 'firebase/fir
 import { FIRESTORE_DB, } from '../firebase-config';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
-export default function ShopList() {
+export default function ShopList({ navigation, setUser }) {
 
   const [lastEditor, setLastEditor] = useState('');
   const [lastEditAt, setLastEditAt] = useState('');
@@ -137,7 +138,16 @@ export default function ShopList() {
     }
   };
   
-
+  const exitApp = () => {
+    Alert.alert('Alert ⚠️', 'Are you sure you want to exit?', [
+      {
+        text: 'Cancel',
+        onPress: () => {console.log('Cancel Pressed')},
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => {setUser(''),navigation.navigate('Login');}},
+    ]);
+  };
 
 return (
   <SafeAreaView style={styles.container}>
@@ -147,7 +157,7 @@ return (
       style={styles.container}
       behavior={"height"}
     >
-      <View style={styles.header}>
+      <View style={styles.header}> 
         <Text style={{ fontSize: 20, fontWeight: 'bold', margin: 10, color: "#09263B" }}>רשימת הקניות שלי🛒</Text>
         <Text style={{ fontSize: 18, color: "#09263B" }}>Last edit by: {currentEditor} AT: {date}</Text>
         <TextInput
@@ -194,6 +204,13 @@ return (
           <AntDesign style={styles.clearBotton} name="delete" size={24} color="black" />
         </TouchableOpacity>
       </View>
+
+      <View style={styles.exitButtonContainer}>
+        <TouchableOpacity onPress={() => exitApp()}>
+          <MaterialIcons name="exit-to-app" size={30} color="#005f73" />
+        </TouchableOpacity>
+      </View>
+
     </KeyboardAvoidingView>
   </SafeAreaView>
 );
@@ -282,5 +299,12 @@ buttonsSection: {
   backgroundColor: '#82BDC1',
   padding: 10,
 },
-itemsListEmpty: {},
+itemsListEmpty: {
+
+},
+  exitButtonContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
 });

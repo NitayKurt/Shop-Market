@@ -1,29 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
-import { TextInput, Button, } from 'react-native-paper';
+import { TextInput, Button } from 'react-native-paper';
 
 export default function Login({ setUser, navigation }) {
   const [userInput, setUserInput] = useState('');
+  const [authSuccess, setAuthSuccess] = useState(false);
+
+  useEffect(() => {
+    if (authSuccess) {
+      navigation.navigate('ShopList');
+    }
+  }, [authSuccess, navigation]);
 
   const checkUser = () => {
     console.log("user", userInput);
-    if (userInput.trim() === 'ofri' || userInput.trim() === 'Ofri' || userInput.trim() === 'עפרי' ) {
+    if (userInput.trim().toLowerCase() === 'ofri' || userInput.trim() === 'עפרי') {
       alert('Welcome back Ofri');
       setUser(userInput);
-      navigation.navigate('List');
-    } else if (userInput.trim() === 'nitay' || userInput.trim() === 'Nitay' || userInput.trim() === 'ניתאי'){
+      setAuthSuccess(true);
+    } else if (userInput.trim().toLowerCase() === 'nitay' || userInput.trim() === 'ניתאי'){
       alert('Welcome Nitay');
       setUser(userInput);
-      navigation.navigate('List');
+      setAuthSuccess(true);
     } else {
       alert('Wrong User Name!');
       setUserInput('');
     }
   };
+
   return (
     <SafeAreaView style={styles.container}>
-
-      <View style={{ alignContent: "center", alignItems: "center", }}>
+      <View style={{ alignContent: "center", alignItems: "center" }}>
         <Text style={styles.header}>Shop Market 🛒</Text>
       </View>
 
@@ -48,7 +55,6 @@ export default function Login({ setUser, navigation }) {
         <Button style={styles.button} mode="contained" onPress={checkUser}>
           <Text style={{ color: 'white', fontSize: 20, fontWeight: "bold" }}>התחברות</Text>
         </Button>
-
       </View>
     </SafeAreaView>
   );
@@ -84,7 +90,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: 'white',
     textAlign: 'center',
-
   },
   button: {
     width: '80%',
