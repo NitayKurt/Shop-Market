@@ -44,7 +44,7 @@ export default function ShopList() {
       setLastEditor(fetchedLastEditor);
       setLastEditAt(fetchedLastEditAt);
       setItems(fetchedData);
-
+      alert('List updated✅');
     } catch (error) {
       console.log("Error getting documents: ", error);
     }
@@ -81,16 +81,16 @@ export default function ShopList() {
 
   const sendList = async () => {
     try {
-      if (data.length === 0){
-      const docRef = await addDoc(collection(FIRESTORE_DB, 'products'), {
-        items: items,
-        editor: currentEditor,
-        date: date,
-      });
-      console.log("Document written with ID: ",docRef.id);
-      Alert.alert('Success', 'List sent successfully✅');
+      // if (data.length === 0){
+      // const docRef = await addDoc(collection(FIRESTORE_DB, 'products'), {
+      //   items: items,
+      //   editor: currentEditor,
+      //   date: date,
+      // });
+      // console.log("Document written with ID: ",docRef.id);
+      // Alert.alert('Success', 'List sent successfully✅');
 
-      } else {
+      // } else {
       const updateProducts = await updateDoc(doc(FIRESTORE_DB, "products",dataId), {
         items: items,
         editor: currentEditor,
@@ -98,8 +98,7 @@ export default function ShopList() {
       });
       console.log("Document updated with ID: ", dataId);
       Alert.alert('Success', 'List Updated successfully✅');
-      }
-
+      
     } catch (error) {
       Alert.alert('Error', 'Error sending list❌');
       console.error('Error adding document: ', error);
@@ -113,16 +112,30 @@ export default function ShopList() {
   };
 
   const clearList = () => {
-    Alert.alert('Alert⚠️', 'Are you sure you want to delete the whole list?', [
+    Alert.alert('Alert ⚠️', 'Are you sure you want to delete the whole list?', [
       {
         text: 'Cancel',
         onPress: () => {console.log('Cancel Pressed')},
         style: 'cancel',
       },
-      {text: 'OK', onPress: () => {setItems([]), alert('List cleared✅')}},
+      {text: 'OK', onPress: () => {resetList()}},
     ]);
   };
 
+  const resetList = async() => {
+    try {
+      const updateProducts = await updateDoc(doc(FIRESTORE_DB, "products",dataId), {
+        items: [],
+        editor: currentEditor,
+        date: date,
+      });
+      setItems([]);
+      alert('List cleared✅')
+    } catch (error) {
+      Alert.alert('Error', 'Error delete list❌');
+      console.error('Error delete document: ', error);
+    }
+  };
   
 
 
