@@ -7,11 +7,11 @@ export default function Login({ setUser, navigation }) {
 
   const checkUser = () => {
     console.log("user", userInput);
-    if (userInput.trim() === 'ofri' || userInput.trim() === 'Ofri') {
+    if (userInput.trim() === 'ofri' || userInput.trim() === 'Ofri' || userInput.trim() === 'עפרי' ) {
       alert('Welcome back Ofri');
       setUser(userInput);
       navigation.navigate('List');
-    } else if (userInput.trim() === 'nitay' || userInput.trim() === 'Nitay') {
+    } else if (userInput.trim() === 'nitay' || userInput.trim() === 'Nitay' || userInput.trim() === 'ניתאי'){
       alert('Welcome Nitay');
       setUser(userInput);
       navigation.navigate('List');
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '80%',
-    backgroundColor: '#f17537',
+    backgroundColor: '#1E92C4',
   },
   circle: {
     width: 200,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: '#f17537',
+    backgroundColor: '#1E92C4',
     marginTop: 120,
   },
 });
