@@ -61,14 +61,14 @@ export default function ShopList({ navigation, setUser }) {
       }
       setItem('');
     }
+    setItem('');
   };
   
 
 
-  const handleKeyPress = (key) => {
-    if (key === '.') {
-      saveItem(item);
-      setItem('');
+  const handleKeyPress = (text) => {
+    if (text.includes('.')) {
+        saveItem(text);
     }
   };
 
@@ -152,14 +152,13 @@ return (
     >
       <View style={styles.header}> 
         <Text style={{ fontSize: 20, fontWeight: 'bold', margin: 10, color: "#09263B" }}>רשימת הקניות שלי🛒</Text>
-        <Text style={{ fontSize: 18, color: "#09263B" }}>Last edit by: {currentEditor} AT: {date}</Text>
+        <Text style={{ fontSize: 18, color: "#09263B" }}>Last edit by: {lastEditor} AT: {lastEditAt}</Text>
         <TextInput
           style={styles.input}
           placeholder="הקש כאן כדי להוסיף דברים לרשימה"
-          onChangeText={(text) => setItem(text)}
+          onChangeText={(text) => {setItem(text),handleKeyPress(text);}}
           value={item}
           autoFocus={true}
-          onKeyPress={(e) => handleKeyPress(e.nativeEvent.key)}
         />
       </View>
 
