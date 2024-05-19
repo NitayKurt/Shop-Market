@@ -51,25 +51,18 @@ export default function ShopList({ navigation, setUser }) {
     }
   };
   
-  const saveItem = async(item) => {
-      if (item.trim() !== '') {
-        if(!items.includes(item)){
-        setItems([...items, item]);
-        setItem(''); // Clear the input after saving
+  const saveItem = (item) => {
+    const trimmedItem = item.trim();
+    if (trimmedItem !== '') {
+      if (!items.includes(trimmedItem)) {
+        setItems([...items, trimmedItem]);
+      } else {
+        alert("Item already exists❗");
       }
-    
-  }
-    if (item.trim() !== '') {
-      if(!items.includes(item)){
-      setItems([...items, item]);
-      setItem(''); // Clear the input after saving
-      
-    }
-    else{
-      alert("Item already exists❗");
       setItem('');
-    }}
+    }
   };
+  
 
 
   const handleKeyPress = (key) => {

@@ -18,7 +18,7 @@ export default function Login({ setUser, navigation }) {
       alert('Welcome back Ofri');
       setUser(userInput);
       setAuthSuccess(true);
-    } else if (userInput.trim().toLowerCase() === 'nitay' || userInput.trim() === 'ניתאי'){
+    } else if (userInput.trim().toLowerCase() === 'nitay' || userInput.trim() === 'נתאי'){
       alert('Welcome Nitay');
       setUser(userInput);
       setAuthSuccess(true);
@@ -30,7 +30,7 @@ export default function Login({ setUser, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ alignContent: "center", alignItems: "center" }}>
+      <View style={{ alignContent: "center", alignItems: "center", top:60}}>
         <Text style={styles.header}>Shop Market 🛒</Text>
       </View>
 
