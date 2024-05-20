@@ -9,15 +9,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function ShopList({ navigation, setUser }) {
+export default function ShopList({ navigation, setUser, user }) {
 
   const [lastEditor, setLastEditor] = useState('');
   const [lastEditAt, setLastEditAt] = useState('');
-  const [currentEditor, setCurrentEditor] = useState('ofri');
+  const [currentEditor, setCurrentEditor] = useState(user);
   const date = new Date().toLocaleString();
   const [item, setItem] = useState('');
   const [items, setItems] = useState([]);
-  const [data, setData] = useState([]);
   const [dataId, setDataId] = useState('');
 
 

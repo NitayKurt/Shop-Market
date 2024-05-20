@@ -21,7 +21,7 @@ export default function App() {
         }}>
         {user ? (
           <Stack.Screen name='ShopList' >
-            {(props) => <ShopList {...props} setUser={setUser} />}
+            {(props) => <ShopList {...props} setUser={setUser} user={user}/>}
           </Stack.Screen>
         ) : (
           <Stack.Screen name='Login'>

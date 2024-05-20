@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
+import {  USER1, USER2, USER3, USER4 } from '@env';
 
 export default function Login({ setUser, navigation }) {
   const [userInput, setUserInput] = useState('');
@@ -13,12 +14,11 @@ export default function Login({ setUser, navigation }) {
   }, [authSuccess, navigation]);
 
   const checkUser = () => {
-    console.log("user", userInput);
-    if (userInput.trim().toLowerCase() === 'ofri' || userInput.trim() === 'עפרי') {
+    if (userInput.trim().toLowerCase() === USER3 || userInput.trim() === USER4) {
       alert('Welcome back Ofri');
       setUser(userInput);
       setAuthSuccess(true);
-    } else if (userInput.trim().toLowerCase() === 'nitay' || userInput.trim() === 'נתאי'){
+    } else if (userInput.trim().toLowerCase() === USER1 || userInput.trim() === USER2){
       alert('Welcome Nitay');
       setUser(userInput);
       setAuthSuccess(true);
