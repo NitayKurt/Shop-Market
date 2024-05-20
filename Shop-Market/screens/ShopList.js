@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, } from 'react-native';
 import { Card, Button } from 'react-native-paper';
 import EmptyListCase from '../components/EmptyListCase';
