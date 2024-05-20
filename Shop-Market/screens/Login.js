@@ -30,7 +30,7 @@ export default function Login({ setUser, navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ alignContent: "center", alignItems: "center", top:60}}>
+      <View style={styles.headerContainer}>
         <Text style={styles.header}>Shop Market 🛒</Text>
       </View>
 
@@ -52,8 +52,8 @@ export default function Login({ setUser, navigation }) {
           style={styles.textInput}
         />
 
-        <Button style={styles.button} mode="contained" onPress={checkUser}>
-          <Text style={{ color: 'white', fontSize: 20, fontWeight: "bold" }}>התחברות</Text>
+        <Button style={styles.buttonContainer} mode="contained" onPress={checkUser}>
+          <Text style={styles.buttonText}>התחברות</Text>
         </Button>
       </View>
     </SafeAreaView>
@@ -66,8 +66,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#82BDC1',
   },
   headerContainer: {
-    alignItems: 'center',
-    marginTop: 50,
+    alignContent: "center",
+    alignItems: "center",
+    top:60
   },
   header: {
     color: 'white',
@@ -91,9 +92,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     textAlign: 'center',
   },
-  button: {
+  buttonContainer: {
     width: '80%',
     backgroundColor: '#1E92C4',
+  },
+  buttonText:{
+    color: 'white',
+    fontSize: 20,
+    fontWeight: "bold"
   },
   circle: {
     width: 200,

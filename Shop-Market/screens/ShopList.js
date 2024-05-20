@@ -143,15 +143,14 @@ export default function ShopList({ navigation, setUser, user }) {
 
 return (
   <SafeAreaView style={styles.container}>
-    <StatusBar style="auto" backgroundColor="#82BDC1" />
 
     <KeyboardAvoidingView
       style={styles.container}
       behavior={"height"}
     >
-      <View style={styles.header}> 
-        <Text style={{ fontSize: 20, fontWeight: 'bold', margin: 10, color: "#09263B" }}>רשימת הקניות שלי🛒</Text>
-        <Text style={{ fontSize: 18, color: "#09263B" }}>Last edit by: {lastEditor} AT: {lastEditAt}</Text>
+      <View style={styles.headerContainer}> 
+        <Text style={styles.mainHeader}>רשימת הקניות שלי🛒</Text>
+        <Text style={styles.subHeader}>Last edit by: {lastEditor} AT: {lastEditAt}</Text>
         <TextInput
           style={styles.input}
           placeholder="הקש כאן כדי להוסיף דברים לרשימה"
@@ -215,10 +214,20 @@ container: {
   borderColor: '#82BDC1',
   borderWidth: 5,
 },
-header: {
+headerContainer: {
   alignItems: 'center',
   backgroundColor: '#82BDC1',
   padding: 10,
+},
+mainHeader: {
+  fontSize: 20,
+  fontWeight: 'bold',
+  margin: 10,
+  color: "#09263B"
+},
+subHeader:{
+  fontSize: 18,
+  color: "#09263B"
 },
 input: {
   height: 40,
