@@ -61,7 +61,7 @@ export default function ShopList({ navigation, setUser, user }) {
     }
     setItem('');
   };
-  
+
 
 
   const handleKeyPress = (text) => {
@@ -170,7 +170,7 @@ return (
               <Card key={index} style={styles.card}>
                 <Card.Actions style={styles.cardActions}>
                   <Text style={[styles.item, { flex: 1 }]}>
-                    {item}
+                    {item} 
                   </Text>
                   <Button style={{ backgroundColor: "#f44336" }} onPress={() => deleteItem(items.length - index - 1)}>
                     <Text style={{ color: "white" }}>X</Text>
