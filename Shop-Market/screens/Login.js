@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, Keyboard, Platform, } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import {  USER1, USER2, USER3, USER4 } from '@env';
 
@@ -29,79 +29,68 @@ export default function Login({ setUser, navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView style={{flex: 1}} behavior='padding' keyboardVerticalOffset={80}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      keyboardVerticalOffset={80}
+    >
       <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Text style={styles.header}>Shop Market 🛒</Text>
-      </View>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inner}>
+            <View style={styles.headerContainer}>
+              <Text style={styles.header}>Shop Market 🛒</Text>
+            </View>
 
-      <View style={styles.circle}>
-        <Image source={require("../assets/groceriesBag.png")} />
-      </View>
+            <View style={styles.circle}>
+              <Image source={require('../assets/groceriesBag.png')} />
+            </View>
 
-      <View style={styles.content}>
-        <Text style={styles.loginText}>Login</Text>
-
-        <TextInput
-          autoFocus={true}
-          value={userInput}
-          placeholderTextColor={'#82BDC1'}
-          placeholder="הכנס שם משתמש"
-          textAlign='center'
-          textAlignVertical='center'
-          onChangeText={(text) => setUserInput(text)}
-          style={styles.textInput}
-        />
-
-        <Button style={styles.buttonContainer} mode="contained" onPress={checkUser}>
-          <Text style={styles.buttonText}>התחברות</Text>
-        </Button>
-      </View>
+            <View style={styles.content}>
+              <Text style={styles.loginText}>Login</Text>
+              <TextInput
+                autoFocus={true}
+                value={userInput}
+                placeholderTextColor={'#82BDC1'}
+                placeholder="הכנס שם משתמש"
+                textAlign="center"
+                onChangeText={(text) => setUserInput(text)}
+                style={styles.textInput}
+              />
+              <Button
+                style={styles.buttonContainer}
+                mode="contained"
+                onPress={checkUser}
+              >
+                <Text style={styles.buttonText}>התחברות</Text>
+              </Button>
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#82BDC1',
   },
+  inner: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    padding: 24,
+  },
   headerContainer: {
-    alignContent: "center",
-    alignItems: "center",
-    top:60
+    alignContent: 'center',
+    alignItems: 'center',
+    marginBottom: 40,
   },
   header: {
     color: 'white',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontStyle: 'italic',
-  },
-  content: {
-    marginTop: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loginText: {
-    fontSize: 24,
-    marginBottom: 40,
-    color: 'white',
-  },
-  textInput: {
-    width: '80%',
-    marginBottom: 20,
-    backgroundColor: 'white',
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    width: '80%',
-    backgroundColor: '#1E92C4',
-  },
-  buttonText:{
-    color: 'white',
-    fontSize: 20,
-    fontWeight: "bold"
   },
   circle: {
     width: 200,
@@ -111,6 +100,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: '#1E92C4',
-    marginTop: 120,
+    marginBottom: 40,
+  },
+  content: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginText: {
+    fontSize: 24,
+    marginBottom: 20,
+    color: 'white',
+  },
+  textInput: {
+    width: '80%',
+    marginBottom: 20,
+    backgroundColor: 'white',
+    textAlign: 'center',
+    padding: 10,
+  },
+  buttonContainer: {
+    width: '80%',
+    backgroundColor: '#1E92C4',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
