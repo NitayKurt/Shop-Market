@@ -78,13 +78,13 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
+    justifyContent: 'flex-end',
     padding: 24,
   },
   headerContainer: {
     alignContent: 'center',
     alignItems: 'center',
     marginBottom: 40,
-    marginTop: 120,
   },
   header: {
     color: 'white',
