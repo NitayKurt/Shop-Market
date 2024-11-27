@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import {  USER1, USER2, USER3, USER4 } from '@env';
 
@@ -29,7 +29,7 @@ export default function Login({ setUser, navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Shop Market 🛒</Text>
       </View>
@@ -56,7 +56,7 @@ export default function Login({ setUser, navigation }) {
           <Text style={styles.buttonText}>התחברות</Text>
         </Button>
       </View>
-    </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 }
 
