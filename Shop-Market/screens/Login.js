@@ -48,13 +48,13 @@ export default function Login({ setUser, navigation }) {
             <View style={styles.content}>
               <Text style={styles.loginText}>Login</Text>
               <TextInput
+                style={styles.textInput}
                 autoFocus={true}
                 value={userInput}
                 placeholderTextColor={'#82BDC1'}
                 placeholder="הכנס שם משתמש"
                 textAlign="center"
                 onChangeText={(text) => setUserInput(text)}
-                style={styles.textInput}
               />
               <Button
                 style={styles.buttonContainer}
@@ -78,13 +78,13 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
-    justifyContent: 'flex-end',
     padding: 24,
   },
   headerContainer: {
     alignContent: 'center',
     alignItems: 'center',
     marginBottom: 40,
+    marginTop: 120,
   },
   header: {
     color: 'white',
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: '#1E92C4',
-    marginBottom: 40,
+    marginBottom: 80,
   },
   content: {
     justifyContent: 'center',
@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     backgroundColor: 'white',
     textAlign: 'center',
-    padding: 10,
   },
   buttonContainer: {
     width: '80%',
