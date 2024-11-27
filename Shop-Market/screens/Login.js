@@ -29,7 +29,7 @@ export default function Login({ setUser, navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior='padding' keyboardVerticalOffset={80}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Shop Market 🛒</Text>
       </View>
@@ -58,7 +58,7 @@ export default function Login({ setUser, navigation }) {
       </View>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
