@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, } from 'react-native';
-import { Card, Button } from 'react-native-paper';
+import { Card, } from 'react-native-paper';
 import EmptyListCase from '../components/EmptyListCase';
 import { collection, getDocs, addDoc, setDoc, doc,updateDoc } from 'firebase/firestore';
 import { FIRESTORE_DB, } from '../firebase-config';
