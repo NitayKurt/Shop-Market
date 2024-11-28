@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, KeyboardAvoidingView, SafeAreaView, TouchableWithoutFeedback, Keyboard, Platform, } from 'react-native';
+import { StyleSheet, Text, View, Image, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard, } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import {  USER1, USER2, USER3, USER4 } from '@env';
 
@@ -29,12 +29,7 @@ export default function Login({ setUser, navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      keyboardVerticalOffset={80}
-    >
-      <SafeAreaView style={styles.container}>
+    <KeyboardAvoidingView style={styles.container} behavior={'padding'} keyboardVerticalOffset={80}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.inner}>
             <View style={styles.headerContainer}>
@@ -46,7 +41,6 @@ export default function Login({ setUser, navigation }) {
             </View>
 
             <View style={styles.content}>
-              <Text style={styles.loginText}>Login</Text>
               <TextInput
                 style={styles.textInput}
                 autoFocus={true}
@@ -56,20 +50,15 @@ export default function Login({ setUser, navigation }) {
                 textAlign="center"
                 onChangeText={(text) => setUserInput(text)}
               />
-              <Button
-                style={styles.buttonContainer}
-                mode="contained"
-                onPress={checkUser}
-              >
+              <Button style={styles.buttonContainer} mode="contained" onPress={checkUser}>
                 <Text style={styles.buttonText}>התחברות</Text>
               </Button>
             </View>
           </View>
         </TouchableWithoutFeedback>
-      </SafeAreaView>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -106,19 +95,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  loginText: {
-    fontSize: 24,
-    marginBottom: 20,
-    color: 'white',
-  },
   textInput: {
     width: '80%',
     marginBottom: 20,
     backgroundColor: 'white',
     textAlign: 'center',
+    borderColor: "#1E92C4",
+    borderWidth: 1,
   },
   buttonContainer: {
-    width: '80%',
+    width: '50%',
     backgroundColor: '#1E92C4',
   },
   buttonText: {

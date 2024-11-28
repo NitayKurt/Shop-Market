@@ -49,18 +49,36 @@ export default function ShopList({ navigation, setUser, user }) {
     }
   };
   
-  const saveItem = (item) => {
-    const trimmedItem = item.trim();
+  // const saveItem = (item) => {
+  //   const trimmedItem = item.trim();
+  //   if (trimmedItem !== '') {
+  //     if (!items.includes(trimmedItem)) {
+  //       setItems([...items, trimmedItem]);
+  //     } else {
+  //       alert("Item already exists❗");
+  //     }
+  //     setItem('');
+  //   }
+  //   setItem('');
+  // };
+
+  const saveItem = (itemName) => {
+    const trimmedItem = itemName.trim();
     if (trimmedItem !== '') {
-      if (!items.includes(trimmedItem)) {
-        setItems([...items, trimmedItem]);
+      const existingItemIndex = items.findIndex(item => item.name === trimmedItem);
+      if (existingItemIndex !== -1) {
+        // If the item already exists, increase its quantity
+        const updatedItems = [...items];
+        updatedItems[existingItemIndex].quantity += 1;
+        setItems(updatedItems);
       } else {
-        alert("Item already exists❗");
+        // Add a new item with a quantity of 1
+        setItems([...items, { name: trimmedItem, quantity: 1 }]);
       }
       setItem('');
     }
-    setItem('');
   };
+  
 
 
 
@@ -70,32 +88,46 @@ export default function ShopList({ navigation, setUser, user }) {
     }
   };
 
-
   const sendList = async () => {
     try {
-      // if (data.length === 0){
-      // const docRef = await addDoc(collection(FIRESTORE_DB, 'products'), {
-      //   items: items,
-      //   editor: currentEditor,
-      //   date: date,
-      // });
-      // console.log("Document written with ID: ",docRef.id);
-      // Alert.alert('Success', 'List sent successfully✅');
-
-      // } else {
-      const updateProducts = await updateDoc(doc(FIRESTORE_DB, "products",dataId), {
-        items: items,
+      await updateDoc(doc(FIRESTORE_DB, "products", dataId), {
+        items: items, // Updated array of objects
         editor: currentEditor,
         date: date,
       });
       console.log("Document updated with ID: ", dataId);
-      Alert.alert('Success', 'List Updated successfully✅');
-      
+      Alert.alert('Success', 'List updated successfully ✅');
     } catch (error) {
-      Alert.alert('Error', 'Error sending list❌');
-      console.error('Error adding document: ', error);
+      Alert.alert('Error', 'Error sending list ❌');
+      console.error('Error updating document: ', error);
     }
   };
+
+  // const sendList = async () => {
+  //   try {
+  //     // if (data.length === 0){
+  //     // const docRef = await addDoc(collection(FIRESTORE_DB, 'products'), {
+  //     //   items: items,
+  //     //   editor: currentEditor,
+  //     //   date: date,
+  //     // });
+  //     // console.log("Document written with ID: ",docRef.id);
+  //     // Alert.alert('Success', 'List sent successfully✅');
+
+  //     // } else {
+  //     const updateProducts = await updateDoc(doc(FIRESTORE_DB, "products",dataId), {
+  //       items: items,
+  //       editor: currentEditor,
+  //       date: date,
+  //     });
+  //     console.log("Document updated with ID: ", dataId);
+  //     Alert.alert('Success', 'List Updated successfully✅');
+      
+  //   } catch (error) {
+  //     Alert.alert('Error', 'Error sending list❌');
+  //     console.error('Error adding document: ', error);
+  //   }
+  // };
 
   const deleteItem = (index) => {
     const newItems = [...items];
@@ -142,11 +174,7 @@ export default function ShopList({ navigation, setUser, user }) {
 
 return (
   <SafeAreaView style={styles.container}>
-
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={"height"}
-    >
+    <KeyboardAvoidingView style={styles.container} behavior={"height"}>
       <View style={styles.headerContainer}> 
         <Text style={styles.mainHeader}>רשימת הקניות שלי🛒</Text>
         <Text style={styles.subHeader}>Last edit by: {lastEditor} AT: {lastEditAt}</Text>
@@ -165,19 +193,46 @@ return (
         ) : (
           <ScrollView>
             {/* Display the list as card with option to delete */}
-            {items.length > 0 &&
-            items.slice().reverse().map((item, index) => (
-              <Card key={index} style={styles.card}>
-                <Card.Actions style={styles.cardActions}>
-                  <Text style={[styles.item, { flex: 1 }]}>
-                    {item} 
-                  </Text>
-                  <Button style={{ backgroundColor: "#f44336" }} onPress={() => deleteItem(items.length - index - 1)}>
-                    <Text style={{ color: "white" }}>X</Text>
-                  </Button>
-                </Card.Actions>
-              </Card>
-            ))}
+            {items.map((item, index) => (
+  <Card key={index} style={styles.card}>
+    <Card.Actions style={styles.cardActions}>
+      <Text style={[styles.item, { flex: 1 }]}>{item.name}</Text>
+      <View style={styles.itemCounterSection}>
+        <TouchableOpacity
+          style={styles.counterChanger}
+          onPress={() => {
+            const updatedItems = [...items];
+            updatedItems[index].quantity += 1;
+            setItems(updatedItems);
+          }}
+        >
+          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>+</Text>
+        </TouchableOpacity>
+        <Text style={{ color: "#1E92C4", fontWeight: "bold" }}>
+          {item.quantity}
+        </Text>
+        <TouchableOpacity
+          style={styles.counterChanger}
+          onPress={() => {
+            const updatedItems = [...items];
+            if (updatedItems[index].quantity > 1) {
+              updatedItems[index].quantity -= 1;
+              setItems(updatedItems);
+            }
+          }}
+        >
+          <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>-</Text>
+        </TouchableOpacity>
+      </View>
+      <Button
+        style={{ backgroundColor: "#f44336" }}
+        onPress={() => deleteItem(index)}
+      >
+        <Text style={{ color: "white" }}>X</Text>
+      </Button>
+    </Card.Actions>
+  </Card>
+))}
           </ScrollView>
         )}
       </View>
@@ -199,7 +254,6 @@ return (
           <MaterialIcons name="exit-to-app" size={30} color="#005f73" />
         </TouchableOpacity>
       </View>
-
     </KeyboardAvoidingView>
   </SafeAreaView>
 );
@@ -301,9 +355,24 @@ buttonsSection: {
 itemsListEmpty: {
 
 },
-  exitButtonContainer: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
+exitButtonContainer: {
+  position: 'absolute',
+  top: 10,
+  right: 10,
   },
+itemCounterSection: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  backgroundColor: 'white',
+  justifyContent: 'space-between',
+  width: 80,
+  right: 10,
+  },
+  counterChanger: {
+  backgroundColor: '#1E92C4',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: 30,
+  height: 30,
+  borderRadius: 10,}
 });
