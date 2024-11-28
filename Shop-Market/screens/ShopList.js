@@ -18,10 +18,9 @@ export default function ShopList({ navigation, setUser, user }) {
   const [items, setItems] = useState([]);
   const [dataId, setDataId] = useState('');
 
-
-  // useEffect(() => {
-  //   getData();
-  // }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
   const getData = async () => {
     try {
