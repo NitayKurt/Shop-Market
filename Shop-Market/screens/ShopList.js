@@ -88,10 +88,13 @@ export default function ShopList({ navigation, setUser, user }) {
 
 
   const deleteItem = (index) => {
+    // Since items are displayed in reverse, adjust the index to match the original array
+    const actualIndex = items.length - 1 - index;
     const newItems = [...items];
-    newItems.splice(index, 1);
+    newItems.splice(actualIndex, 1);
     setItems(newItems);
   };
+  
 
   const clearList = () => {
     Alert.alert('Alert ⚠️', 'Are you sure you want to delete the whole list?', [
@@ -150,27 +153,45 @@ return (
           <EmptyListCase />
         ) : (
           <ScrollView>
-            {/* Display the list as card with option to delete */}
-            {items.slice().reverse().map((item, index) => (
-              <Card key={index} style={styles.card}>
-                <Card.Actions style={styles.cardActions}>
-                  <Text style={[styles.item, { flex: 1 }]}>{item.name}</Text>
-                  <View style={styles.itemCounterSection}>
-                    <TouchableOpacity style={styles.counterChanger} onPress={() => {const updatedItems = [...items]; updatedItems[index].quantity += 1; setItems(updatedItems);}}>
-                      <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>+</Text>
-                    </TouchableOpacity>
-                      <Text style={{ color: "#1E92C4", fontWeight: "bold" }}>{item.quantity}</Text>
-                    <TouchableOpacity style={styles.counterChanger} onPress={() => {const updatedItems = [...items]; if (updatedItems[index].quantity > 1) {updatedItems[index].quantity -= 1; setItems(updatedItems);}}}>
-                      <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>-</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <TouchableOpacity style={styles.deleteButton} onPress={() => deleteItem(index)}>
-                    <Text style={{ color: "white" }}>X</Text>
-                  </TouchableOpacity>
-                </Card.Actions>
-              </Card>
-            ))}
-          </ScrollView>
+  {items
+    .slice() // Create a shallow copy to avoid mutating the original array
+    .reverse()
+    .map((item, index) => (
+      <Card key={index} style={styles.card}>
+        <Card.Actions style={styles.cardActions}>
+          <Text style={[styles.item, { flex: 1 }]}>{item.name}</Text>
+          <View style={styles.itemCounterSection}>
+            <TouchableOpacity style={styles.counterChanger}
+              onPress={() => {
+                const actualIndex = items.length - 1 - index;
+                const updatedItems = [...items];
+                updatedItems[actualIndex].quantity += 1;
+                setItems(updatedItems);
+              }}
+            >
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>+</Text>
+            </TouchableOpacity>
+            <Text style={{ color: "#1E92C4", fontWeight: "bold" }}>{item.quantity}</Text>
+            <TouchableOpacity style={styles.counterChanger}
+              onPress={() => {
+                const actualIndex = items.length - 1 - index;
+                const updatedItems = [...items];
+                if (updatedItems[actualIndex].quantity > 1) {
+                  updatedItems[actualIndex].quantity -= 1;
+                  setItems(updatedItems);
+                }
+              }}
+            >
+              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>-</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.deleteButton} onPress={() => deleteItem(index)}>
+            <Text style={{ color: "white" }}>X</Text>
+          </TouchableOpacity>
+        </Card.Actions>
+      </Card>
+    ))}
+</ScrollView>
         )}
       </View>
 
