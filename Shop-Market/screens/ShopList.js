@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Image,} from 'react-native';
 import { Card, } from 'react-native-paper';
 import EmptyListCase from '../components/EmptyListCase';
 import { collection, getDocs, addDoc, setDoc, doc,updateDoc } from 'firebase/firestore';
@@ -153,47 +153,44 @@ return (
           <EmptyListCase />
         ) : (
           <ScrollView>
-  {items
-    .slice() // Create a shallow copy to avoid mutating the original array
-    .reverse()
-    .map((item, index) => (
-      <Card key={index} style={styles.card}>
-        <Card.Actions style={styles.cardActions}>
-          <Text style={[styles.item, { flex: 1 }]}>{item.name}</Text>
-          <View style={styles.itemCounterSection}>
-            <TouchableOpacity style={styles.counterChanger}
-              onPress={() => {
-                const actualIndex = items.length - 1 - index;
-                const updatedItems = [...items];
-                updatedItems[actualIndex].quantity += 1;
-                setItems(updatedItems);
-              }}
-            >
-              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>+</Text>
-            </TouchableOpacity>
-            <Text style={{ color: "#1E92C4", fontWeight: "bold" }}>{item.quantity}</Text>
-            <TouchableOpacity style={styles.counterChanger}
-              onPress={() => {
-                const actualIndex = items.length - 1 - index;
-                const updatedItems = [...items];
-                if (updatedItems[actualIndex].quantity > 1) {
-                  updatedItems[actualIndex].quantity -= 1;
-                  setItems(updatedItems);
-                }
-              }}
-            >
-              <Text style={{ color: "#fff", fontWeight: "bold", fontSize: 20 }}>-</Text>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.deleteButton} onPress={() => deleteItem(index)}>
-            <Text style={{ color: "white" }}>X</Text>
-          </TouchableOpacity>
-        </Card.Actions>
-      </Card>
-    ))}
-</ScrollView>
-        )}
-      </View>
+              {items.slice().reverse().map((item, index) => (
+                <Card key={index} style={styles.card}>
+                  <Card.Actions style={styles.cardActions}>
+                      <Text style={[styles.item, { flex: 1 }]}>{item.name}</Text>
+                    <View style={styles.itemCounterSection}>
+                      <TouchableOpacity style={styles.counterChanger}
+                        onPress={() => {
+                        const actualIndex = items.length - 1 - index;
+                        const updatedItems = [...items];
+                        updatedItems[actualIndex].quantity += 1;
+                        setItems(updatedItems);
+                        }}
+                      >
+                        <Image source={require('../assets/arrowUpIcon.png')} style={styles.arrowUpImage} />
+                      </TouchableOpacity>
+                      <Text style={{ color: "#1E92C4", fontWeight: "bold" }}>{item.quantity}</Text>
+                      <TouchableOpacity style={styles.counterChanger}
+                        onPress={() => {
+                        const actualIndex = items.length - 1 - index;
+                        const updatedItems = [...items];
+                        if (updatedItems[actualIndex].quantity > 1) {
+                        updatedItems[actualIndex].quantity -= 1;
+                        setItems(updatedItems);
+                        }
+                        }}
+                        >
+                        <Image source={require('../assets/arrowDownIcon.png')} style={styles.arrowDownImage} />
+                      </TouchableOpacity>
+                    </View>
+                    <TouchableOpacity style={styles.deleteButton} onPress={() => deleteItem(index)}>
+                      <Text style={{ color: "white" }}>X</Text>
+                    </TouchableOpacity>
+                  </Card.Actions>
+                </Card>
+              ))}
+            </ScrollView>
+          )}
+    </View>
 
       <View style={styles.buttonsSection}>
         <TouchableOpacity onPress={() => sendList()}>
@@ -332,10 +329,18 @@ itemCounterSection: {
   right: 10,
   },
   counterChanger: {
-  backgroundColor: '#1E92C4',
   justifyContent: 'center',
   alignItems: 'center',
   width: 30,
   height: 30,
-  borderRadius: 10,}
+  borderRadius: 10,
+  },
+  arrowUpImage:{
+    width: 20,
+    height: 20,
+  },
+  arrowDownImage:{
+    width: 20,
+    height: 20,
+  },
 });
