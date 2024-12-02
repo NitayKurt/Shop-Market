@@ -153,22 +153,11 @@ return (
           <EmptyListCase />
         ) : (
           <ScrollView>
-              {items.slice().reverse().map((item, index) => (
+               {items.slice().reverse().map((item, index) => (
                 <Card key={index} style={styles.card}>
                   <Card.Actions style={styles.cardActions}>
                       <Text style={[styles.item, { flex: 1 }]}>{item.name}</Text>
                     <View style={styles.itemCounterSection}>
-                      <TouchableOpacity style={styles.counterChanger}
-                        onPress={() => {
-                        const actualIndex = items.length - 1 - index;
-                        const updatedItems = [...items];
-                        updatedItems[actualIndex].quantity += 1;
-                        setItems(updatedItems);
-                        }}
-                      >
-                        <Image source={require('../assets/arrowUpIcon.png')} style={styles.arrowUpImage} />
-                      </TouchableOpacity>
-                      <Text style={{ color: "#1E92C4", fontWeight: "bold" }}>{item.quantity}</Text>
                       <TouchableOpacity style={styles.counterChanger}
                         onPress={() => {
                         const actualIndex = items.length - 1 - index;
@@ -180,6 +169,17 @@ return (
                         }}
                         >
                         <Image source={require('../assets/arrowDownIcon.png')} style={styles.arrowDownImage} />
+                      </TouchableOpacity>
+                      <Text style={{ color: "#1E92C4", fontWeight: "bold" }}>{item.quantity}</Text>
+                      <TouchableOpacity style={styles.counterChanger}
+                        onPress={() => {
+                        const actualIndex = items.length - 1 - index;
+                        const updatedItems = [...items];
+                        updatedItems[actualIndex].quantity += 1;
+                        setItems(updatedItems);
+                        }}
+                        >
+                        <Image source={require('../assets/arrowUpIcon.png')} style={styles.arrowUpImage} />
                       </TouchableOpacity>
                     </View>
                     <TouchableOpacity style={styles.deleteButton} onPress={() => deleteItem(index)}>
