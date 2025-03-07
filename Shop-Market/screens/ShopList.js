@@ -50,7 +50,7 @@ export default function ShopList({ navigation, setUser, user }) {
   
   const saveItem = (itemName) => {
     const trimmedItem = itemName.trim();
-    if (trimmedItem !== '') {
+    if (trimmedItem !== '' && trimmedItem !== '.') {
       const existingItemIndex = items.findIndex(item => item.name === trimmedItem);
       if (existingItemIndex !== -1) {
         // If the item already exists, increase its quantity
