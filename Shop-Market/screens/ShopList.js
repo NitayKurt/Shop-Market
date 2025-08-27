@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Image,} from 'react-native';
 import { Card, } from 'react-native-paper';
-import EmptyListCase from '../components/EmptyListCase';
 import { collection, getDocs, addDoc, setDoc, doc,updateDoc } from 'firebase/firestore';
 import { FIRESTORE_DB, } from '../firebase-config';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
+import EmptyListCase from '../components/EmptyListCase';
 
 export default function ShopList({ navigation, setUser, user }) {
 
@@ -67,7 +67,7 @@ export default function ShopList({ navigation, setUser, user }) {
   
   const handleKeyPress = (text) => {
     if (text.includes('.')) {
-        saveItem(text);
+      saveItem(text);
     }
   };
 
@@ -86,7 +86,6 @@ export default function ShopList({ navigation, setUser, user }) {
     }
   };
 
-
   const deleteItem = (index) => {
     // Since items are displayed in reverse, adjust the index to match the original array
     const actualIndex = items.length - 1 - index;
@@ -95,7 +94,6 @@ export default function ShopList({ navigation, setUser, user }) {
     setItems(newItems);
   };
   
-
   const clearList = () => {
     Alert.alert('Alert ⚠️', 'Are you sure you want to delete the whole list?', [
       {
@@ -215,125 +213,125 @@ return (
 };
 
 const styles = StyleSheet.create({
-container: {
-  flex: 1,
-  justifyContent: 'flex-start',
-  paddingTop: 35,
-  borderColor: '#82BDC1',
-  borderWidth: 5,
-},
-headerContainer: {
-  alignItems: 'center',
-  backgroundColor: '#82BDC1',
-  padding: 10,
-},
-mainHeader: {
-  fontSize: 20,
-  fontWeight: 'bold',
-  margin: 10,
-  color: "#09263B"
-},
-subHeader:{
-  fontSize: 18,
-  color: "#09263B"
-},
-input: {
-  height: 40,
-  color: '#1E92C4',
-  borderColor: '#1E92C4',
-  borderWidth: 2,
-  borderRadius: 5,
-  padding: 10,
-  margin: 20,
-  backgroundColor: 'white',
-  width: '80%',
-},
-item: {
-  padding: 5,
-  fontSize: 18,
-  height: 44,
-  color: '#1E92C4',
-},
-saveBotton: {
-  backgroundColor: '#4caf50',
-  color: 'white',
-  fontSize: 20,
-  padding: 10,
-  margin: 10,
-  borderRadius: 5,
-},
-refershBotton: {
-  backgroundColor: '#00B0FF',
-  color: 'white',
-  fontSize: 20,
-  padding: 10,
-  margin: 10,
-  borderRadius: 5,
-},
-clearBotton: {
-  backgroundColor: '#f44336',
-  color: 'white',
-  fontSize: 20,
-  padding: 10,
-  margin: 10,
-  borderRadius: 5,
-  alignContent: "flex-end",
-  right: 0,
-},
-itemsList: {
-  flex: 1,
-  borderColor: '#09263B',
-  borderWidth: 5,
-  borderRadius: 15,
-  backgroundColor: '#82BDC1',
-  marginTop: 10,
-  paddingHorizontal: 20,
-  paddingVertical: 10,
-},
-card: {
-  backgroundColor: "white",
-  borderColor: "#1E92C4",
-  borderWidth: 1,
-  marginVertical: 5,
-},
-cardActions: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-},
-buttonsSection: {
-  flexDirection: "row",
-  justifyContent: 'space-between',
-  backgroundColor: '#82BDC1',
-  padding: 10,
-},
-deleteButton: {
-  backgroundColor: '#f44336',
-  color: 'white',
-  fontSize: 20,
-  padding: 10,
-  margin: 10,
-  borderRadius: 5,
-},
-exitButtonContainer: {
-  position: 'absolute',
-  top: 10,
-  right: 10,
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    paddingTop: 35,
+    borderColor: '#82BDC1',
+    borderWidth: 5,
   },
-itemCounterSection: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: 'white',
-  justifyContent: 'space-between',
-  width: 80,
-  right: 10,
+  headerContainer: {
+    alignItems: 'center',
+    backgroundColor: '#82BDC1',
+    padding: 10,
   },
+  mainHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    margin: 10,
+    color: "#09263B"
+  },
+  subHeader:{
+    fontSize: 18,
+    color: "#09263B"
+  },
+  input: {
+    height: 40,
+    color: '#1E92C4',
+    borderColor: '#1E92C4',
+    borderWidth: 2,
+    borderRadius: 5,
+    padding: 10,
+    margin: 20,
+    backgroundColor: 'white',
+    width: '80%',
+  },
+  item: {
+    padding: 5,
+    fontSize: 18,
+    height: 44,
+    color: '#1E92C4',
+  },
+  saveBotton: {
+    backgroundColor: '#4caf50',
+    color: 'white',
+    fontSize: 20,
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+  },
+  refershBotton: {
+    backgroundColor: '#00B0FF',
+    color: 'white',
+    fontSize: 20,
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+  },
+  clearBotton: {
+    backgroundColor: '#f44336',
+    color: 'white',
+    fontSize: 20,
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+    alignContent: "flex-end",
+    right: 0,
+  },
+  itemsList: {
+    flex: 1,
+    borderColor: '#09263B',
+    borderWidth: 5,
+    borderRadius: 15,
+    backgroundColor: '#82BDC1',
+    marginTop: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  card: {
+    backgroundColor: "white",
+    borderColor: "#1E92C4",
+    borderWidth: 1,
+    marginVertical: 5,
+  },
+  cardActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  buttonsSection: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    backgroundColor: '#82BDC1',
+    padding: 10,
+  },
+  deleteButton: {
+    backgroundColor: '#f44336',
+    color: 'white',
+    fontSize: 20,
+    padding: 10,
+    margin: 10,
+    borderRadius: 5,
+  },
+  exitButtonContainer: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    },
+  itemCounterSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    width: 80,
+    right: 10,
+    },
   counterChanger: {
-  justifyContent: 'center',
-  alignItems: 'center',
-  width: 30,
-  height: 30,
-  borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 30,
+    height: 30,
+    borderRadius: 10,
   },
   arrowUpImage:{
     width: 20,
