@@ -240,12 +240,13 @@ const styles = StyleSheet.create({
   sectionHeaderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignContent: 'center',
-    alignSelf: 'center',
-    textAlign:'center',
+    justifyContent: 'center',
     backgroundColor: '#e0fbfc',
-    paddingHorizontal: 150,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 10,
+    marginVertical: 4,
+    alignSelf: 'center',
   },
   sectionHeaderIcon: {
     width: 24,
