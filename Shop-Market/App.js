@@ -1,15 +1,30 @@
-import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from 'expo-status-bar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from './screens/Login';
 import ShopList from './screens/ShopList';
-import { StatusBar } from 'expo-status-bar';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [user, setUser] = useState(""); // Initially user is not authenticated
+  const [user, setUser] = useState("");
+
+  const checkUser = async () => {
+    try {
+      const value = await AsyncStorage.getItem('savedUser');
+      if (value !== null) {
+        setUser(value);
+      }
+    } catch (e) {
+      console.log('Error reading user from AsyncStorage:', e);
+    }
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, []);
 
   return (
     <NavigationContainer>
@@ -32,5 +47,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({});
