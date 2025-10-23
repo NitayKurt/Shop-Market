@@ -34,7 +34,7 @@ export default function Login({ setUser, navigation }) {
 
   const checkUser = async () => {
     if (!userInput) {
-      alert('Please enter a user name');
+      Alert.alert("Error ❌",'Please enter a user name');
       return;
     }
     if (users.includes(userInput.trim().toLowerCase()) || users.includes(userInput.trim())) {

@@ -47,7 +47,7 @@ export default function ShopList({ navigation, setUser, user }) {
       setLastEditor(fetchedLastEditor);
       setLastEditAt(fetchedLastEditAt);
       setItems(fetchedData);
-      alert('List updated ✅');
+      Alert.alert('Success','List updated ✅');
     } catch (error) {
       Alert.alert('Error', 'Error getting list ❌');
       console.log("Error getting documents: ", error);
