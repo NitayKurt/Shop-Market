@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, SectionList, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, SectionList, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../firebase-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -150,60 +150,61 @@ export default function ShopList({ navigation, setUser, user }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView style={styles.container} behavior={"height"}>
-        <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={exitApp} style={styles.exitButtonContainer}>
-            <MaterialIcons name="exit-to-app" size={30} color="#005f73" />
-          </TouchableOpacity>
-          <Header lastEditor={lastEditor} lastEditAt={lastEditAt} />
-        </View>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView style={styles.container} behavior={"height"}>
+          <View style={styles.headerContainer}>
+            <TouchableOpacity onPress={exitApp} style={styles.exitButtonContainer}>
+              <MaterialIcons name="exit-to-app" size={30} color="#005f73" />
+            </TouchableOpacity>
+            <Header lastEditor={lastEditor} lastEditAt={lastEditAt} />
+          </View>
 
-        <View style={styles.headerContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="הקש כאן כדי להוסיף דברים לרשימה"
-            onChangeText={(text) => { setItem(text); handleKeyPress(text); }}
-            value={item}
-            autoFocus={true}
-          />
-        </View>
-
-        <View style={styles.itemsList}>
-          {items.length === 0 ? (
-            <EmptyListCase />
-          ) : (
-            <SectionList
-              extraData={items}
-              sections={sections}
-              keyExtractor={(item, index) => `${item.name}-${index}-${item.quantity}`}
-              renderItem={({ item }) => (
-                <ItemCard
-                  item={item}
-                  items={items}
-                  setItems={setItems}
-                  deleteItem={deleteItem}
-                />
-              )}
-              renderSectionHeader={({ section: { title } }) => (
-                <View style={styles.sectionHeaderContainer}>
-                  <Image style={styles.sectionHeaderIcon} source={PickImage(title)}/>
-                  <Text style={styles.sectionHeaderText}>{title}</Text>
-                </View>
-              )}
-              initialNumToRender={20}
-              maxToRenderPerBatch={20}
-              stickySectionHeadersEnabled={false}
+          <View style={styles.headerContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="הקש כאן כדי להוסיף דברים לרשימה"
+              onChangeText={(text) => { setItem(text); handleKeyPress(text); }}
+              value={item}
+              autoFocus={true}
             />
-          )}
-        </View>
+          </View>
 
-        <View style={styles.buttonsSection}>
-          <TouchableOpacity onPress={sendList}><FontAwesome style={styles.saveButton} name="send" size={24} color="black" /></TouchableOpacity>
-          <TouchableOpacity onPress={getData}><FontAwesome style={styles.refreshButton} name="refresh" size={24} color="black" /></TouchableOpacity>
-          <TouchableOpacity onPress={clearList}><AntDesign style={styles.clearButton} name="delete" size={24} color="black" /></TouchableOpacity>
-        </View>
+          <View style={styles.itemsList}>
+            {items.length === 0 ? (
+              <EmptyListCase />
+            ) : (
+              <SectionList
+                extraData={items}
+                sections={sections}
+                keyExtractor={(item, index) => `${item.name}-${index}-${item.quantity}`}
+                renderItem={({ item }) => (
+                  <ItemCard
+                    item={item}
+                    items={items}
+                    setItems={setItems}
+                    deleteItem={deleteItem}
+                  />
+                )}
+                renderSectionHeader={({ section: { title } }) => (
+                  <View style={styles.sectionHeaderContainer}>
+                    <Image style={styles.sectionHeaderIcon} source={PickImage(title)}/>
+                    <Text style={styles.sectionHeaderText}>{title}</Text>
+                  </View>
+                )}
+                initialNumToRender={20}
+                maxToRenderPerBatch={20}
+                stickySectionHeadersEnabled={false}
+              />
+            )}
+          </View>
 
-      </KeyboardAvoidingView>
+          <View style={styles.buttonsSection}>
+            <TouchableOpacity onPress={sendList}><FontAwesome style={styles.saveButton} name="send" size={24} color="black" /></TouchableOpacity>
+            <TouchableOpacity onPress={getData}><FontAwesome style={styles.refreshButton} name="refresh" size={24} color="black" /></TouchableOpacity>
+            <TouchableOpacity onPress={clearList}><AntDesign style={styles.clearButton} name="delete" size={24} color="black" /></TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
@@ -233,16 +234,17 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 10,
     backgroundColor: '#82BDC1', 
-    marginTop: 10, 
-    paddingHorizontal: 20, 
+    paddingHorizontal: 10, 
     paddingVertical: 10 
   },
   sectionHeaderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+    textAlign:'center',
     backgroundColor: '#e0fbfc',
-    paddingVertical: 6,
-    paddingHorizontal: 10,
+    paddingHorizontal: 150,
     borderRadius: 10,
   },
   sectionHeaderIcon: {

@@ -42,16 +42,16 @@ export default function ItemCard({ items, item, setItems, deleteItem }) {
 
 const styles = StyleSheet.create({
   item: {
-    padding: 5,
-    fontSize: 18,
-    height: 44,
+    padding: 1,
+    fontSize: 20,
+    height: 35,
     color: '#1E92C4',
   },
   card: {
     backgroundColor: "white",
     borderColor: "#1E92C4",
     borderWidth: 1,
-    marginVertical: 2,
+    marginVertical: 1.5,
   },
   cardActions: {
     flexDirection: 'row',
