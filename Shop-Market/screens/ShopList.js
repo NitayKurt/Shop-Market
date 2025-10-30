@@ -22,7 +22,6 @@ export default function ShopList({ navigation, setUser, user }) {
   const [dataId, setDataId] = useState('');
   const categories = categoriesJSON.categories;
 
-  // --- Fetch Data ---
   const getData = useCallback(async () => {
     try {
       const productsRef = collection(FIRESTORE_DB, "products");
@@ -47,7 +46,6 @@ export default function ShopList({ navigation, setUser, user }) {
 
   const cleanName = useCallback(name => name.replace(/[?.!]/g, '').trim(), []);
 
-  // --- Section Memoization ---
   const sections = useMemo(() => {
     const lookup = {};
     categories.forEach(cat => cat.data.forEach(name => { lookup[name.trim()] = cat.title; }));
@@ -60,7 +58,6 @@ export default function ShopList({ navigation, setUser, user }) {
     return Object.keys(grouped).map(title => ({ title, data: grouped[title] }));
   }, [items, categories]);
 
-  // --- Add / Save Item ---
   const saveItem = useCallback((itemName) => {
     const trimmed = cleanName(itemName);
     if (!trimmed) return;
@@ -79,11 +76,8 @@ export default function ShopList({ navigation, setUser, user }) {
     setItem('');
   }, [cleanName]);
 
-  
-
   const handleKeyPress = useCallback((text) => { if (text.includes('.')) saveItem(text); }, [saveItem]);
 
-  // --- Send / Clear / Delete ---
   const sendList = useCallback(async () => {
     try {
       await updateDoc(doc(FIRESTORE_DB, "products", dataId), { items, editor: currentEditor, date });
@@ -127,19 +121,18 @@ export default function ShopList({ navigation, setUser, user }) {
     try { await AsyncStorage.removeItem('savedUser'); } catch (error) { console.log(error); }
   }, []);
 
-  // --- Render ---
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={exitApp} style={styles.exitButtonContainer}>
-              <MaterialIcons name="exit-to-app" size={30} color="#005f73" />
-            </TouchableOpacity>
-            <Header lastEditor={lastEditor} lastEditAt={lastEditAt} />
-          </View>
+      <KeyboardAvoidingView style={styles.container} behavior="height">
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.container}>
+            <View style={styles.headerContainer}>
+              <TouchableOpacity onPress={exitApp} style={styles.exitButtonContainer}>
+                <MaterialIcons name="exit-to-app" size={30} color="#005f73" />
+              </TouchableOpacity>
+              <Header lastEditor={lastEditor} lastEditAt={lastEditAt} />
+            </View>
 
-          <KeyboardAvoidingView behavior="height">
             <TextInput
               style={styles.input}
               placeholder="הקש כאן כדי להוסיף דברים לרשימה"
@@ -147,56 +140,152 @@ export default function ShopList({ navigation, setUser, user }) {
               value={item}
               autoFocus={true}
             />
-          </KeyboardAvoidingView>
 
-          <View style={styles.itemsList}>
-            {items.length === 0 ? <EmptyListCase /> : (
-              <SectionList
-                sections={sections}
-                keyExtractor={item => item.name} // stable key
-                renderItem={({ item }) => {
-                  const handleUpdate = updatedItem => setItems(prev => prev.map(i => i.name === updatedItem.name ? updatedItem : i));
-                  const handleDelete = () => deleteItem(item.name);
-                  return <ItemCard item={item} updateItem={handleUpdate} deleteItem={handleDelete} />;
-                }}
-                renderSectionHeader={({ section: { title } }) => (
-                  <View style={styles.sectionHeaderContainer}>
-                    <Image style={styles.sectionHeaderIcon} source={PickImage(title)} />
-                    <Text style={styles.sectionHeaderText}>{title}</Text>
-                  </View>
-                )}
-                initialNumToRender={15}
-                maxToRenderPerBatch={15}
-                windowSize={21}
-                stickySectionHeadersEnabled={false}
-              />
-            )}
-          </View>
+            <View style={styles.itemsList}>
+              {items.length === 0 ? (
+                <EmptyListCase />
+              ) : (
+                <SectionList
+                  sections={sections}
+                  keyExtractor={item => item.name}
+                  renderItem={({ item }) => {
+                    const handleUpdate = updatedItem =>
+                      setItems(prev => prev.map(i => i.name === updatedItem.name ? updatedItem : i));
+                    const handleDelete = () => deleteItem(item.name);
+                    return (
+                      <ItemCard
+                        item={item}
+                        updateItem={handleUpdate}
+                        deleteItem={handleDelete}
+                      />
+                    );
+                  }}
+                  renderSectionHeader={({ section: { title } }) => (
+                    <View style={styles.sectionHeaderContainer}>
+                      <Image style={styles.sectionHeaderIcon} source={PickImage(title)} />
+                      <Text style={styles.sectionHeaderText}>{title}</Text>
+                    </View>
+                  )}
+                  initialNumToRender={15}
+                  maxToRenderPerBatch={15}
+                  windowSize={21}
+                  stickySectionHeadersEnabled={false}
+                />
+              )}
+            </View>
 
-          <View style={styles.buttonsSection}>
-            <TouchableOpacity onPress={sendList}><FontAwesome style={[styles.buttonBase, styles.saveButton]} name="send" size={24} color="white" /></TouchableOpacity>
-            <TouchableOpacity onPress={getData}><FontAwesome style={[styles.buttonBase, styles.refreshButton]} name="refresh" size={24} color="white" /></TouchableOpacity>
-            <TouchableOpacity onPress={clearList}><AntDesign style={[styles.buttonBase, styles.clearButton]} name="delete" size={24} color="white" /></TouchableOpacity>
+            <View style={styles.buttonsSection}>
+              <TouchableOpacity onPress={sendList}>
+                <FontAwesome
+                  style={[styles.buttonBase, styles.saveButton]}
+                  name="send"
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={getData}>
+                <FontAwesome
+                  style={[styles.buttonBase, styles.refreshButton]}
+                  name="refresh"
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={clearList}>
+                <AntDesign
+                  style={[styles.buttonBase, styles.clearButton]}
+                  name="delete"
+                  size={24}
+                  color="white"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
-// --- Styles ---
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 35 },
-  headerContainer: { backgroundColor: '#82BDC1', paddingVertical: 10, alignItems: 'center', justifyContent: 'center', position: 'relative' },
-  exitButtonContainer: { position: 'absolute', top: -10, right: 10, padding: 5 },
-  input: { height: 50, color: '#1E92C4', borderColor: '#1E92C4', borderWidth: 2, borderRadius: 5, padding: 10, margin: 20, backgroundColor: 'white', width: '80%' },
-  itemsList: { flex: 1, borderRadius: 10, backgroundColor: '#82BDC1', paddingHorizontal: 10, paddingVertical: 10 },
-  sectionHeaderContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#e0fbfc', paddingVertical: 6, paddingHorizontal: 12, borderRadius: 10, marginVertical: 4, alignSelf: 'center' },
-  sectionHeaderIcon: { width: 24, height: 24, marginRight: 8, resizeMode: 'contain' },
-  sectionHeaderText: { fontWeight: 'bold', fontSize: 18, color: '#023047', marginVertical: 5 },
-  buttonsSection: { flexDirection: "row", justifyContent: 'space-between', borderTopColor:"#1E92C4", borderTopWidth: 1, backgroundColor: '#82BDC1', padding: 10 },
-  buttonBase: { padding: 10, margin: 10, borderRadius: 5 },
-  saveButton: { backgroundColor: '#4caf50' },
-  refreshButton: { backgroundColor: '#00B0FF' },
-  clearButton: { backgroundColor: '#f44336' },
+  container: { 
+    flex: 1,
+    paddingTop: 35 
+  },
+  headerContainer: { 
+    backgroundColor: '#82BDC1', 
+    paddingVertical: 10, 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    position: 'relative' 
+  },
+  exitButtonContainer: { 
+    position: 'absolute', 
+    top: -10, 
+    right: 10, 
+    padding: 5 
+  },
+  input: { 
+    height: 50, 
+    color: '#1E92C4', 
+    borderColor: '#1E92C4', 
+    borderWidth: 2, 
+    borderRadius: 5, 
+    padding: 10, 
+    margin: 20, 
+    backgroundColor: 'white', 
+    width: '80%' 
+  },
+  itemsList: { 
+    flex: 1, 
+    borderRadius: 10, 
+    backgroundColor: '#82BDC1', 
+    paddingHorizontal: 10, 
+    paddingVertical: 10 
+  },
+  sectionHeaderContainer: { 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    backgroundColor: '#e0fbfc', 
+    paddingVertical: 6, 
+    paddingHorizontal: 12, 
+    borderRadius: 10, 
+    marginVertical: 4, 
+    alignSelf: 'center' 
+  },
+  sectionHeaderIcon: { 
+    width: 24, 
+    height: 24, 
+    marginRight: 8, 
+    resizeMode: 'contain' 
+  },
+  sectionHeaderText: { 
+    fontWeight: 'bold', 
+    fontSize: 18, 
+    color: '#023047', 
+    marginVertical: 5 
+  },
+  buttonsSection: { 
+    flexDirection: "row", 
+    justifyContent: 'space-between', 
+    borderTopColor:"#1E92C4", 
+    borderTopWidth: 1, 
+    backgroundColor: '#82BDC1', 
+    padding: 10 
+  },
+  buttonBase: { 
+    padding: 10, 
+    margin: 10, 
+    borderRadius: 5 
+  },
+  saveButton: { 
+    backgroundColor: '#4caf50' 
+  },
+  refreshButton: { 
+    backgroundColor: '#00B0FF' 
+  },
+  clearButton: { 
+    backgroundColor: '#f44336' 
+  },
 });
