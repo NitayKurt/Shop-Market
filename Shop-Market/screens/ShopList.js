@@ -124,8 +124,7 @@ export default function ShopList({ navigation, setUser, user }) {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={styles.container} behavior="height">
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.headerContainer}>
               <TouchableOpacity onPress={exitApp} style={styles.exitButtonContainer}>
                 <MaterialIcons name="exit-to-app" size={30} color="#005f73" />
@@ -160,6 +159,10 @@ export default function ShopList({ navigation, setUser, user }) {
                       />
                     );
                   }}
+                  keyboardShouldPersistTaps="handled"
+                  keyboardDismissMode="on-drag"
+                  nestedScrollEnabled={true}
+                  removeClippedSubviews={true}
                   renderSectionHeader={({ section: { title } }) => (
                     <View style={styles.sectionHeaderContainer}>
                       <Image style={styles.sectionHeaderIcon} source={PickImage(title)} />
@@ -201,7 +204,6 @@ export default function ShopList({ navigation, setUser, user }) {
               </TouchableOpacity>
             </View>
           </View>
-        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
