@@ -148,8 +148,7 @@ export default function ShopList({ navigation, setUser, user }) {
                   sections={sections}
                   keyExtractor={item => item.name}
                   renderItem={({ item }) => {
-                    const handleUpdate = updatedItem =>
-                      setItems(prev => prev.map(i => i.name === updatedItem.name ? updatedItem : i));
+                    const handleUpdate = updatedItem => setItems(prev => prev.map(i => i.name === updatedItem.name ? updatedItem : i));
                     const handleDelete = () => deleteItem(item.name);
                     return (
                       <ItemCard
@@ -179,28 +178,13 @@ export default function ShopList({ navigation, setUser, user }) {
 
             <View style={styles.buttonsSection}>
               <TouchableOpacity onPress={sendList}>
-                <FontAwesome
-                  style={[styles.buttonBase, styles.saveButton]}
-                  name="send"
-                  size={24}
-                  color="white"
-                />
+                <FontAwesome style={[styles.buttonBase, styles.saveButton]} name="send" size={24} color="white"/>
               </TouchableOpacity>
               <TouchableOpacity onPress={getData}>
-                <FontAwesome
-                  style={[styles.buttonBase, styles.refreshButton]}
-                  name="refresh"
-                  size={24}
-                  color="white"
-                />
+                <FontAwesome style={[styles.buttonBase, styles.refreshButton]} name="refresh" size={24} color="white"/>
               </TouchableOpacity>
               <TouchableOpacity onPress={clearList}>
-                <AntDesign
-                  style={[styles.buttonBase, styles.clearButton]}
-                  name="delete"
-                  size={24}
-                  color="white"
-                />
+                <AntDesign style={[styles.buttonBase, styles.clearButton]} name="delete" size={24} color="white"/>
               </TouchableOpacity>
             </View>
           </View>
