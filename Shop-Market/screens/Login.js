@@ -19,6 +19,7 @@ export default function Login({ setUser, navigation }) {
       }
     } catch (e) {
       console.log('Error reading user from AsyncStorage:', e);
+      Alert.alert("Error ❌",'Error reading user from AsyncStorage');
     }
   };
   
