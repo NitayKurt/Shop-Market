@@ -1,12 +1,33 @@
-import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, Image, TouchableWithoutFeedback, Keyboard, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, Platform, ScrollView, Animated, Easing } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { USER1, USER2, USER3, USER4 } from '@env';
 
 export default function Login({ setUser, navigation }) {
   const [userInput, setUserInput] = useState(null);
+  const keyboardProgress = useRef(new Animated.Value(0)).current;
   const users = [USER1, USER2, USER3, USER4];
   const [authSuccess, setAuthSuccess] = useState(false);
+
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const animateForKeyboard = toValue => {
+      Animated.timing(keyboardProgress, {
+        toValue,
+        duration: 250,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: false,
+      }).start();
+    };
+    const showSubscription = Keyboard.addListener(showEvent, () => animateForKeyboard(1));
+    const hideSubscription = Keyboard.addListener(hideEvent, () => animateForKeyboard(0));
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, [keyboardProgress]);
   
   const savedUser = async () => {
     try {
@@ -33,6 +54,27 @@ export default function Login({ setUser, navigation }) {
     }
   }, [authSuccess, navigation]);
 
+  const headerFontSize = keyboardProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [40, 34],
+  });
+  const circleSize = keyboardProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [200, 165],
+  });
+  const imageSize = keyboardProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [150, 125],
+  });
+  const circleMargin = keyboardProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [48, 32],
+  });
+  const headerMargin = keyboardProgress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [32, 24],
+  });
+
   const checkUser = async () => {
     if (!userInput) {
       Alert.alert("Error ❌",'Please enter a user name');
@@ -58,30 +100,53 @@ export default function Login({ setUser, navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Shop Market 🛒</Text>
-        </View>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView
+          contentContainerStyle={styles.contentContainer}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Animated.View style={[styles.headerContainer, { marginBottom: headerMargin }]}>
+            <Animated.Text style={[styles.header, { fontSize: headerFontSize }]}>
+              Shop Market 🛒
+            </Animated.Text>
+          </Animated.View>
 
-        <View style={styles.circle}>
-          <Image source={require('../assets/groceriesBag.png')} />
-        </View>
+          <Animated.View
+            style={[
+              styles.circle,
+              {
+                width: circleSize,
+                height: circleSize,
+                borderRadius: Animated.divide(circleSize, 2),
+                marginBottom: circleMargin,
+              },
+            ]}
+          >
+            <Animated.Image
+              source={require('../assets/groceriesBag.png')}
+              style={{ width: imageSize, height: imageSize, resizeMode: 'contain' }}
+            />
+          </Animated.View>
 
-        <View style={styles.content}>
-          <TextInput
-            style={styles.textInput}
-            autoFocus={true}
-            value={userInput}
-            placeholderTextColor={'#82BDC1'}
-            placeholder="שם משתמש"
-            textAlign="center"
-            onChangeText={(text) => setUserInput(text)}
-          />
-          <TouchableOpacity style={styles.buttonContainer} mode="contained" onPress={checkUser}>
-            <Text style={styles.buttonText}>התחברות</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+          <View style={styles.content}>
+            <TextInput
+              style={styles.textInput}
+              autoFocus={true}
+              value={userInput}
+              placeholderTextColor={'#82BDC1'}
+              placeholder="שם משתמש"
+              textAlign="center"
+              onChangeText={(text) => setUserInput(text)}
+            />
+            <TouchableOpacity style={styles.buttonContainer} mode="contained" onPress={checkUser}>
+              <Text style={styles.buttonText}>התחברות</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 };
@@ -90,12 +155,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#82BDC1',
+  },
+  contentContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 24,
   },
   headerContainer: {
-    position: 'absolute',
-    top: 80,
   },
   header: {
     color: 'white',
@@ -111,7 +178,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     backgroundColor: '#1E92C4',
-    marginBottom: 90,
+    marginBottom: 48,
   },
   content: {
     justifyContent: 'center',
