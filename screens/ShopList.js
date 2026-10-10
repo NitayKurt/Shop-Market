@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, SectionList, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, SectionList, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../firebase-config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -122,7 +123,7 @@ export default function ShopList({ navigation, setUser, user }) {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['top']} style={styles.safeArea}>
       <KeyboardAvoidingView style={styles.container} behavior="height">
         <View style={styles.container}>
             <View style={styles.headerContainer}>
@@ -194,24 +195,30 @@ export default function ShopList({ navigation, setUser, user }) {
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1
+  },
   container: { 
-    flex: 1,
-    paddingTop: 35 
+    flex: 1
   },
   headerContainer: { 
     backgroundColor: '#82BDC1', 
-    paddingVertical: 10, 
+    minHeight: 60,
+    paddingVertical: 8, 
+    paddingLeft: 8,
+    paddingRight: 52,
     alignItems: 'center', 
     justifyContent: 'center', 
     position: 'relative' 
   },
   exitButtonContainer: { 
     position: 'absolute', 
-    top: -10, 
+    top: -5, 
     right: 10, 
     padding: 5 
   },
   input: { 
+    alignSelf: 'center',
     height: 50, 
     color: '#1E92C4', 
     borderColor: '#1E92C4', 

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Login from './screens/Login';
 import ShopList from './screens/ShopList';
@@ -27,23 +28,25 @@ export default function App() {
   }, []);
 
   return (
-    <NavigationContainer>
-      <StatusBar backgroundColor="#82BDC1" />
-      <Stack.Navigator 
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: '#82BDC1' },
-        }}>
-        {user ? (
-          <Stack.Screen name='ShopList' >
-            {(props) => <ShopList {...props} setUser={setUser} user={user}/>}
-          </Stack.Screen>
-        ) : (
-          <Stack.Screen name='Login'>
-            {(props) => <Login {...props} setUser={setUser} />}
-          </Stack.Screen>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <StatusBar backgroundColor="#82BDC1" />
+        <Stack.Navigator 
+          screenOptions={{
+            headerShown: false,
+            contentStyle: { backgroundColor: '#82BDC1' },
+          }}>
+          {user ? (
+            <Stack.Screen name='ShopList' >
+              {(props) => <ShopList {...props} setUser={setUser} user={user}/>}
+            </Stack.Screen>
+          ) : (
+            <Stack.Screen name='Login'>
+              {(props) => <Login {...props} setUser={setUser} />}
+            </Stack.Screen>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
